@@ -9,7 +9,9 @@
     * {
       box-sizing: border-box;
       user-select: none;
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
       -webkit-user-select: none;
+      font-family: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", "PingFang TC", sans-serif;
     }
 
     /* Keycap Theme Palettes */
@@ -455,7 +457,7 @@
     .plus-connector {
       font-size: 36px;
       font-weight: 700;
-      color: var(--muted-foreground);
+      color: var(--muted-foreground,#64748b);
       opacity: 0.65;
       animation: keyPopIn 0.35s ease backwards;
     }
@@ -466,56 +468,56 @@
     }
   </style>
 </head>
-<body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen p-3 md:p-5">
+<body class="bg-[var(--background,#f1f5f9)] text-[var(--foreground,#0f172a)] antialiased min-h-screen p-3 md:p-5">
   <div id="app" class="max-w-[1160px] mx-auto space-y-4 kb-theme-black">
 
     <!-- Header & Controls -->
-    <header class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
+    <header class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border,#cbd5e1)]">
       <div>
         <h1 class="text-lg font-bold tracking-tight flex items-center gap-2">
           <span>Puti-AI 擬真台灣標準 104 鍵盤</span>
-          <span id="modeBadge" class="text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--secondary)] text-[var(--secondary-foreground)]">
+          <span id="modeBadge" class="text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--secondary,#e2e8f0)] text-[var(--secondary-foreground,#1e293b)]">
             選取模式
           </span>
         </h1>
-        <p id="helperText" class="text-xs text-[var(--muted-foreground)] mt-0.5">
+        <p id="helperText" class="text-xs text-[var(--muted-foreground,#64748b)] mt-0.5">
           參照標準台灣鍵帽字型排版（英文＋注音＋倉頡/大易），點擊按鍵可複選，確定後放大顯示並隱藏其他按鍵。
         </p>
       </div>
 
       <div class="flex flex-wrap items-center gap-2 text-xs">
         <!-- App Mode Switcher -->
-        <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--card)] p-0.5">
-          <button id="btnModeSelect" type="button" class="px-2.5 py-1 rounded-md font-semibold transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]">
+        <div class="inline-flex rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] p-0.5">
+          <button id="btnModeSelect" type="button" class="px-2.5 py-1 rounded-md font-semibold transition-colors bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)]">
             選取放大
           </button>
-          <button id="btnModeLive" type="button" class="px-2.5 py-1 rounded-md font-semibold transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+          <button id="btnModeLive" type="button" class="px-2.5 py-1 rounded-md font-semibold transition-colors text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)]">
             實況打字 / 語音演示
           </button>
         </div>
 
         <!-- Legend Mode -->
-        <select id="legendSelect" aria-label="鍵帽字元顯示" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-medium cursor-pointer">
+        <select id="legendSelect" aria-label="鍵帽字元顯示" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] text-[var(--foreground,#0f172a)] font-medium cursor-pointer">
           <option value="full">完整標示 (英+注音+倉頡/大易)</option>
           <option value="zhuyin">英數 + 注音</option>
           <option value="en">純英數標示</option>
         </select>
 
         <!-- Theme Selector -->
-        <select id="themeSelect" aria-label="鍵盤風格" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-medium cursor-pointer">
+        <select id="themeSelect" aria-label="鍵盤風格" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] text-[var(--foreground,#0f172a)] font-medium cursor-pointer">
           <option value="black">霧面經典黑 (同附圖)</option>
           <option value="classic">經典復古白</option>
           <option value="ocean">海洋莫蘭迪藍</option>
         </select>
 
         <!-- Sound Toggle -->
-        <button id="btnSound" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] font-medium transition-colors flex items-center gap-1.5" title="切換按鍵音效">
+        <button id="btnSound" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] hover:bg-[var(--secondary,#e2e8f0)] font-medium transition-colors flex items-center gap-1.5" title="切換按鍵音效">
           <span id="soundIcon">🔊</span>
           <span id="soundLabel">音效開</span>
         </button>
 
         <!-- Physical Keyboard Sync -->
-        <button id="btnPhysical" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] font-medium transition-colors flex items-center gap-1.5" title="用實體鍵盤按鍵直接選取/取消">
+        <button id="btnPhysical" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] hover:bg-[var(--secondary,#e2e8f0)] font-medium transition-colors flex items-center gap-1.5" title="用實體鍵盤按鍵直接選取/取消">
           <span id="physDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>實體鍵盤同步</span>
         </button>
@@ -523,50 +525,50 @@
     </header>
 
     <!-- Selection Bar (Select & Enlarge Mode) -->
-    <section id="selectionBar" class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[var(--card)] border border-[var(--border)]">
+    <section id="selectionBar" class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[var(--card,#ffffff)] border border-[var(--border,#cbd5e1)]">
       <div class="flex flex-wrap items-center gap-2 min-h-[32px] flex-1">
-        <span class="text-xs font-medium text-[var(--muted-foreground)] shrink-0">已選按鍵：</span>
+        <span class="text-xs font-medium text-[var(--muted-foreground,#64748b)] shrink-0">已選按鍵：</span>
         <div id="selectedChips" class="flex flex-wrap items-center gap-1.5">
-          <span class="text-xs text-[var(--muted-foreground)] italic">尚未選擇任何按鍵</span>
+          <span class="text-xs text-[var(--muted-foreground,#64748b)] italic">尚未選擇任何按鍵</span>
         </div>
       </div>
 
       <div class="flex items-center gap-2 shrink-0">
-        <button id="btnClear" type="button" disabled class="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--secondary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+        <button id="btnClear" type="button" disabled class="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] text-[var(--foreground,#0f172a)] hover:bg-[var(--secondary,#e2e8f0)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
           清除重選
         </button>
-        <button id="btnConfirm" type="button" disabled class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm">
+        <button id="btnConfirm" type="button" disabled class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm">
           確定放大顯示 (0)
         </button>
-        <button id="btnBack" type="button" class="hidden px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition-all shadow-sm">
+        <button id="btnBack" type="button" class="hidden px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)] hover:opacity-90 transition-all shadow-sm">
           ← 返回完整鍵盤
         </button>
       </div>
     </section>
 
     <!-- Live Typing & Speech Demo Panel -->
-    <section id="livePanel" class="hidden space-y-3 p-4 rounded-xl bg-[var(--card)] border border-[var(--border)]">
+    <section id="livePanel" class="hidden space-y-3 p-4 rounded-xl bg-[var(--card,#ffffff)] border border-[var(--border,#cbd5e1)]">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <div class="flex flex-wrap items-center gap-2 text-xs">
-          <select id="speechLang" aria-label="語音辨識語言" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] font-medium cursor-pointer">
+          <select id="speechLang" aria-label="語音辨識語言" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] text-[var(--foreground,#0f172a)] font-medium cursor-pointer">
             <option value="zh-TW">語音：繁體中文 (台灣)</option>
             <option value="en-US">語音：English (US)</option>
           </select>
 
-          <button id="btnVoice" type="button" class="px-3 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors flex items-center gap-1.5">
+          <button id="btnVoice" type="button" class="px-3 py-1.5 rounded-lg font-semibold border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] hover:bg-[var(--secondary,#e2e8f0)] transition-colors flex items-center gap-1.5">
             <span id="voiceIcon">🎤</span>
             <span id="voiceLabel">口說自動打字</span>
           </button>
 
-          <span class="text-[var(--border)]">|</span>
+          <span class="text-[var(--border,#cbd5e1)]">|</span>
 
-          <label class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)]">
-            <span class="text-[var(--muted-foreground)] font-medium">每鍵間隔：</span>
-            <input id="demoSpeed" type="range" min="0.1" max="5.0" step="0.1" value="0.8" class="w-24 accent-[var(--primary)] cursor-pointer" />
+          <label class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)]">
+            <span class="text-[var(--muted-foreground,#64748b)] font-medium">每鍵間隔：</span>
+            <input id="demoSpeed" type="range" min="0.1" max="5.0" step="0.1" value="0.8" class="w-24 accent-[var(--primary,#2563eb)] cursor-pointer" />
             <span id="demoSpeedLabel" class="font-mono font-semibold tabular-nums min-w-[48px] text-right">0.8 秒</span>
           </label>
 
-          <button id="btnDemoPlay" type="button" class="px-3 py-1.5 rounded-lg font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition-opacity">
+          <button id="btnDemoPlay" type="button" class="px-3 py-1.5 rounded-lg font-semibold bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)] hover:opacity-90 transition-opacity">
             ▶ 演示打字動畫
           </button>
 
@@ -574,55 +576,55 @@
             ⏹ 停止演示
           </button>
 
-          <button id="btnLiveClear" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] font-medium transition-colors">
+          <button id="btnLiveClear" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] hover:bg-[var(--secondary,#e2e8f0)] font-medium transition-colors">
             清除螢幕
           </button>
 
-          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] cursor-pointer font-medium">
-            <input id="chkSpeakKeys" type="checkbox" checked class="accent-[var(--primary)] rounded" />
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] cursor-pointer font-medium">
+            <input id="chkSpeakKeys" type="checkbox" checked class="accent-[var(--primary,#2563eb)] rounded" />
             <span>🗣️ 朗讀注音/字母</span>
           </label>
 
-          <span class="text-[var(--border)]">|</span>
+          <span class="text-[var(--border,#cbd5e1)]">|</span>
 
-          <button id="btnRecAction" type="button" class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors flex items-center gap-1.5" title="錄製打字過程（按鍵、文字、注音與語音）並在頁面內重播">
+          <button id="btnRecAction" type="button" class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] hover:bg-[var(--secondary,#e2e8f0)] transition-colors flex items-center gap-1.5" title="錄製打字過程（按鍵、文字、注音與語音）並在頁面內重播">
             <span id="recDot" class="w-2 h-2 rounded-full bg-rose-500"></span>
             <span id="recLabel">錄製過程</span>
           </button>
 
-          <button id="btnReplayAction" type="button" disabled class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+          <button id="btnReplayAction" type="button" disabled class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] hover:bg-[var(--secondary,#e2e8f0)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
             ▶ 重播錄製
           </button>
 
-          <button id="btnScreenRec" type="button" class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors" title="錄製畫面與聲音並下載成影片檔 (.webm)">
+          <button id="btnScreenRec" type="button" class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] hover:bg-[var(--secondary,#e2e8f0)] transition-colors" title="錄製畫面與聲音並下載成影片檔 (.webm)">
             🎬 錄影下載
           </button>
         </div>
 
         <div class="flex items-center gap-2 text-xs">
-          <span class="text-[var(--muted-foreground)]">目前按鍵：</span>
-          <span id="liveKeyBadge" class="font-mono font-semibold px-2.5 py-1 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] min-w-[72px] text-center">
+          <span class="text-[var(--muted-foreground,#64748b)]">目前按鍵：</span>
+          <span id="liveKeyBadge" class="font-mono font-semibold px-2.5 py-1 rounded-md bg-[var(--secondary,#e2e8f0)] text-[var(--secondary-foreground,#1e293b)] min-w-[72px] text-center">
             待機中
           </span>
         </div>
       </div>
 
-      <textarea id="liveInput" rows="2" placeholder="可直接在此打字（支援中/英輸入法實況同步），或貼上文字後按「▶ 演示打字動畫」，也可點「🎤 口說自動打字」..." class="w-full p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-2xl md:text-3xl font-bold leading-snug resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"></textarea>
+      <textarea id="liveInput" rows="2" placeholder="可直接在此打字（支援中/英輸入法實況同步），或貼上文字後按「▶ 演示打字動畫」，也可點「🎤 口說自動打字」..." class="w-full p-3 rounded-xl border border-[var(--border,#cbd5e1)] bg-[var(--background,#f1f5f9)] text-[var(--foreground,#0f172a)] text-2xl md:text-3xl font-bold leading-snug resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary,#2563eb)]"></textarea>
 
       <!-- Live Zhuyin Breakdown Bar -->
-      <div id="liveZhuyinBar" class="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] text-sm min-h-[42px]">
+      <div id="liveZhuyinBar" class="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[var(--background,#f1f5f9)] border border-[var(--border,#cbd5e1)] text-sm min-h-[42px]">
         <div class="flex flex-wrap items-center gap-2 flex-1">
-          <span class="text-xs font-medium text-[var(--muted-foreground)] shrink-0">注音按鍵歷程：</span>
+          <span class="text-xs font-medium text-[var(--muted-foreground,#64748b)] shrink-0">注音按鍵歷程：</span>
           <div id="liveZhuyinDisplay" class="flex flex-wrap items-center gap-1.5 font-bold text-base">
-            <span class="text-xs font-normal text-[var(--muted-foreground)] italic">輸入中文時會在此顯示注音按鍵（例如「如」：ㄖ ㄨ ˊ）</span>
+            <span class="text-xs font-normal text-[var(--muted-foreground,#64748b)] italic">輸入中文時會在此顯示注音按鍵（例如「如」：ㄖ ㄨ ˊ）</span>
           </div>
         </div>
-        <button id="btnClearHistory" type="button" class="px-2.5 py-1 rounded-md text-xs font-medium border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors shrink-0">
+        <button id="btnClearHistory" type="button" class="px-2.5 py-1 rounded-md text-xs font-medium border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] hover:bg-[var(--secondary,#e2e8f0)] text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)] transition-colors shrink-0">
           清除歷程
         </button>
       </div>
 
-      <div id="liveStatusMsg" class="text-xs text-[var(--muted-foreground)]">
+      <div id="liveStatusMsg" class="text-xs text-[var(--muted-foreground,#64748b)]">
         提示：在上方輸入框打字時，下方鍵盤會即時亮起並按下對應按鍵；中文演示模式會自動拆解常見注音鍵位。
       </div>
     </section>
@@ -685,21 +687,21 @@
     <section id="zoomView" class="hidden space-y-4">
       <div class="flex flex-wrap items-center justify-between gap-3 px-1">
         <div class="flex flex-wrap items-center gap-2 text-xs">
-          <span class="font-medium text-[var(--muted-foreground)]">呈現方式：</span>
-          <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--card)] p-0.5">
-            <button id="btnLayoutRow" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]">
+          <span class="font-medium text-[var(--muted-foreground,#64748b)]">呈現方式：</span>
+          <div class="inline-flex rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] p-0.5">
+            <button id="btnLayoutRow" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)]">
               左右橫排
             </button>
-            <button id="btnLayoutCol" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            <button id="btnLayoutCol" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)]">
               上下直排
             </button>
-            <button id="btnLayoutFree" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            <button id="btnLayoutFree" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)]">
               自由移動
             </button>
           </div>
 
           <!-- Alignment selector (for Row / Col) -->
-          <select id="alignSelect" aria-label="對齊位置" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-medium cursor-pointer">
+          <select id="alignSelect" aria-label="對齊位置" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] text-[var(--foreground,#0f172a)] font-medium cursor-pointer">
             <option value="center">置中對齊</option>
             <option value="top">靠上對齊</option>
             <option value="bottom">靠下對齊</option>
@@ -708,35 +710,35 @@
           </select>
 
           <!-- Reset free positions button -->
-          <button id="btnResetPos" type="button" class="hidden px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] font-medium transition-colors">
+          <button id="btnResetPos" type="button" class="hidden px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] hover:bg-[var(--secondary,#e2e8f0)] font-medium transition-colors">
             重設位置
           </button>
 
-          <label id="plusToggleWrap" class="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] cursor-pointer ml-1">
-            <input id="chkShowPlus" type="checkbox" checked class="accent-[var(--primary)] rounded" />
+          <label id="plusToggleWrap" class="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground,#64748b)] cursor-pointer ml-1">
+            <input id="chkShowPlus" type="checkbox" checked class="accent-[var(--primary,#2563eb)] rounded" />
             顯示「+」符號
           </label>
 
-          <label class="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] cursor-pointer ml-1">
-            <input id="chkShowFunc" type="checkbox" checked class="accent-[var(--primary)] rounded" />
+          <label class="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground,#64748b)] cursor-pointer ml-1">
+            <input id="chkShowFunc" type="checkbox" checked class="accent-[var(--primary,#2563eb)] rounded" />
             顯示功能大字
           </label>
 
-          <input id="funcTextInput" type="text" placeholder="自訂功能說明（如：截圖）" class="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] text-xs w-44 focus:outline-none focus:ring-1 focus:ring-[var(--primary)]" />
+          <input id="funcTextInput" type="text" placeholder="自訂功能說明（如：截圖）" class="px-2.5 py-1 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] text-[var(--foreground,#0f172a)] text-xs w-44 focus:outline-none focus:ring-1 focus:ring-[var(--primary,#2563eb)]" />
         </div>
 
-        <span id="zoomHintText" class="text-xs text-[var(--muted-foreground)]">
-          提示：可直接點擊放大的按鍵示範「按下」效果，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] font-mono">Esc</kbd> 返回完整鍵盤
+        <span id="zoomHintText" class="text-xs text-[var(--muted-foreground,#64748b)]">
+          提示：可直接點擊放大的按鍵示範「按下」效果，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] font-mono">Esc</kbd> 返回完整鍵盤
         </span>
       </div>
 
       <!-- Large Function Title Banner -->
-      <div id="funcBanner" class="hidden text-center py-3 px-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm">
-        <div class="text-xs font-medium text-[var(--muted-foreground)] mb-1">按鍵功能</div>
-        <div id="funcDisplay" class="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--foreground)]"></div>
+      <div id="funcBanner" class="hidden text-center py-3 px-4 rounded-2xl bg-[var(--card,#ffffff)] border border-[var(--border,#cbd5e1)] shadow-sm">
+        <div class="text-xs font-medium text-[var(--muted-foreground,#64748b)] mb-1">按鍵功能</div>
+        <div id="funcDisplay" class="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--foreground,#0f172a)]"></div>
       </div>
 
-      <div id="zoomStage" class="zoom-stage layout-row align-center border border-[var(--border)] bg-[var(--card)]"></div>
+      <div id="zoomStage" class="zoom-stage layout-row align-center border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)]"></div>
     </section>
 
   </div>
@@ -1113,7 +1115,7 @@
       });
 
       if (selectedIds.length === 0) {
-        selectedChipsEl.innerHTML = '<span class="text-xs text-[var(--muted-foreground)] italic">尚未選擇任何按鍵</span>';
+        selectedChipsEl.innerHTML = '<span class="text-xs text-[var(--muted-foreground,#64748b)] italic">尚未選擇任何按鍵</span>';
       } else {
         selectedChipsEl.innerHTML = '';
         selectedIds.forEach((id) => {
@@ -1121,7 +1123,7 @@
           if (!k) return;
           const chip = document.createElement('button');
           chip.type = 'button';
-          chip.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80 transition-opacity';
+          chip.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-[var(--secondary,#e2e8f0)] text-[var(--secondary-foreground,#1e293b)] border border-[var(--border,#cbd5e1)] hover:opacity-80 transition-opacity';
           chip.title = '點擊移除此按鍵';
           chip.innerHTML = `<span>${getChipLabel(k)}</span><span class="opacity-60">×</span>`;
           chip.addEventListener('click', () => {
@@ -1258,8 +1260,8 @@
     const zoomHintText = document.getElementById('zoomHintText');
 
     function updateZoomControlsUI() {
-      const activeCls = 'px-2.5 py-1 rounded-md font-medium transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]';
-      const idleCls = 'px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+      const activeCls = 'px-2.5 py-1 rounded-md font-medium transition-colors bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)]';
+      const idleCls = 'px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)]';
 
       btnLayoutRow.className = zoomLayout === 'row' ? activeCls : idleCls;
       btnLayoutCol.className = zoomLayout === 'col' ? activeCls : idleCls;
@@ -1269,12 +1271,12 @@
         alignSelect.classList.add('hidden');
         plusToggleWrap.classList.add('hidden');
         btnResetPos.classList.remove('hidden');
-        zoomHintText.innerHTML = '提示：拖曳任意按鍵可自由擺放位置，輕點可示範「按下」，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] font-mono">Esc</kbd> 返回';
+        zoomHintText.innerHTML = '提示：拖曳任意按鍵可自由擺放位置，輕點可示範「按下」，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] font-mono">Esc</kbd> 返回';
       } else {
         alignSelect.classList.remove('hidden');
         plusToggleWrap.classList.remove('hidden');
         btnResetPos.classList.add('hidden');
-        zoomHintText.innerHTML = '提示：可直接點擊放大的按鍵示範「按下」效果，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] font-mono">Esc</kbd> 返回完整鍵盤';
+        zoomHintText.innerHTML = '提示：可直接點擊放大的按鍵示範「按下」效果，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)] font-mono">Esc</kbd> 返回完整鍵盤';
       }
     }
 
@@ -1336,7 +1338,7 @@
     function renderZoomStage() {
       const showPlus = chkShowPlus.checked;
       zoomStage.innerHTML = '';
-      zoomStage.className = `zoom-stage layout-${zoomLayout} align-${zoomAlign} border border-[var(--border)] bg-[var(--card)]`;
+      zoomStage.className = `zoom-stage layout-${zoomLayout} align-${zoomAlign} border border-[var(--border,#cbd5e1)] bg-[var(--card,#ffffff)]`;
 
       const stageW = zoomStage.clientWidth || 860;
       const stageH = zoomStage.clientHeight || 480;
@@ -1471,8 +1473,8 @@
 
     function setAppMode(mode) {
       appMode = mode;
-      const activeCls = 'px-2.5 py-1 rounded-md font-semibold transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]';
-      const idleCls = 'px-2.5 py-1 rounded-md font-semibold transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+      const activeCls = 'px-2.5 py-1 rounded-md font-semibold transition-colors bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)]';
+      const idleCls = 'px-2.5 py-1 rounded-md font-semibold transition-colors text-[var(--muted-foreground,#64748b)] hover:text-[var(--foreground,#0f172a)]';
 
       btnModeSelect.className = mode === 'select' ? activeCls : idleCls;
       btnModeLive.className = mode === 'live' ? activeCls : idleCls;
@@ -1577,12 +1579,12 @@
       liveZhuyinDisplay.innerHTML = '';
       if (targetChar) {
         const charBadge = document.createElement('span');
-        charBadge.className = 'px-2 py-0.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] text-sm font-bold';
+        charBadge.className = 'px-2 py-0.5 rounded-md bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)] text-sm font-bold';
         charBadge.textContent = targetChar;
         liveZhuyinDisplay.appendChild(charBadge);
 
         const arrow = document.createElement('span');
-        arrow.className = 'text-[var(--muted-foreground)] text-xs';
+        arrow.className = 'text-[var(--muted-foreground,#64748b)] text-xs';
         arrow.textContent = '→';
         liveZhuyinDisplay.appendChild(arrow);
       }
@@ -1592,7 +1594,7 @@
         const isActive = i === activeIdx;
         pill.className = isActive
           ? 'px-2 py-0.5 rounded-md bg-sky-500 text-white shadow-sm scale-105 transition-all text-base'
-          : 'px-2 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] text-base';
+          : 'px-2 py-0.5 rounded-md bg-[var(--secondary,#e2e8f0)] text-[var(--secondary-foreground,#1e293b)] border border-[var(--border,#cbd5e1)] text-base';
         pill.textContent = sym === 'ˉ' ? '一聲(空白)' : sym;
         liveZhuyinDisplay.appendChild(pill);
       });
@@ -1711,7 +1713,7 @@
     function clearZhuyinHistory() {
       liveImeBuffer = [];
       liveKeyBadge.textContent = '待機中';
-      liveZhuyinDisplay.innerHTML = '<span class="text-xs font-normal text-[var(--muted-foreground)] italic">輸入中文時會在此顯示注音按鍵（例如「如」：ㄖ ㄨ ˊ）</span>';
+      liveZhuyinDisplay.innerHTML = '<span class="text-xs font-normal text-[var(--muted-foreground,#64748b)] italic">輸入中文時會在此顯示注音按鍵（例如「如」：ㄖ ㄨ ˊ）</span>';
     }
 
     async function runTypingDemo(text) {
@@ -1736,7 +1738,7 @@
             renderZhuyinSteps(ch, zhuyinSeq, i);
             speakZhuyinOrChar(zhuyinSeq[i]);
           } else {
-            liveZhuyinDisplay.innerHTML = `<span class="text-xs font-normal text-[var(--muted-foreground)]">正在輸入：</span><span class="px-2 py-0.5 rounded-md bg-[var(--secondary)] text-sm">${ch === ' ' ? '空白鍵' : ch}</span>`;
+            liveZhuyinDisplay.innerHTML = `<span class="text-xs font-normal text-[var(--muted-foreground,#64748b)]">正在輸入：</span><span class="px-2 py-0.5 rounded-md bg-[var(--secondary,#e2e8f0)] text-sm">${ch === ' ' ? '空白鍵' : ch}</span>`;
             if (i === 0) speakZhuyinOrChar(ch);
           }
           const sec = parseFloat(demoSpeed.value) || 0.8;
