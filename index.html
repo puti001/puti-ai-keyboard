@@ -521,6 +521,12 @@
           <span id="physDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>實體鍵盤同步</span>
         </button>
+
+        <!-- Help / User Guide Button -->
+        <button id="btnHelp" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border,#cbd5e1)] bg-[var(--secondary,#e2e8f0)] text-[var(--secondary-foreground,#1e293b)] hover:opacity-85 font-semibold transition-opacity flex items-center gap-1" title="查看功能介紹與使用說明">
+          <span>📖</span>
+          <span>使用說明</span>
+        </button>
       </div>
     </header>
 
@@ -2093,6 +2099,79 @@
     // Init
     renderKeyboard();
     updateSelectionUI();
+  </script>
+
+  <!-- Help / User Guide Modal -->
+  <div id="helpModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/55 backdrop-blur-sm">
+    <div class="w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl bg-[var(--card,#ffffff)] text-[var(--foreground,#0f172a)] border border-[var(--border,#cbd5e1)] shadow-2xl p-6 space-y-5">
+      <div class="flex items-center justify-between border-b border-[var(--border,#cbd5e1)] pb-3">
+        <h2 class="text-lg font-bold flex items-center gap-2">
+          <span>📖</span>
+          <span>Puti-AI 擬真台灣標準 104 鍵盤 — 功能介紹與使用說明</span>
+        </h2>
+        <button id="btnCloseHelp" type="button" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-[var(--secondary,#e2e8f0)] text-[var(--secondary-foreground,#1e293b)] hover:opacity-80">
+          ✕ 關閉
+        </button>
+      </div>
+
+      <div class="space-y-4 text-sm leading-relaxed">
+        <section class="space-y-1.5">
+          <h3 class="font-bold text-base text-[var(--primary,#2563eb)]">一、擬真台灣 104 鍵帽設計</h3>
+          <p class="text-xs text-[var(--muted-foreground,#64748b)]">
+            完整呈現台灣教室常見標準 104 鍵盤（含編輯區與右側數字鍵盤），每個鍵帽皆採四象限排版（左上英文、右上注音、左下數字/倉頡、右下大易字根），並可於右上方切換「完整標示 / 英數+注音 / 純英數」與三種鍵盤配色（霧面經典黑、經典復古白、海洋莫蘭迪藍）。
+          </p>
+        </section>
+
+        <section class="space-y-1.5">
+          <h3 class="font-bold text-base text-[var(--primary,#2563eb)]">二、「選取放大」模式（教學快速鍵必備）</h3>
+          <ul class="list-disc pl-5 space-y-1 text-xs text-[var(--muted-foreground,#64748b)]">
+            <li><strong class="text-[var(--foreground,#0f172a)]">複選按鍵</strong>：用滑鼠點擊鍵盤（或直接按實體鍵盤）即可複選多個按鍵，例如 <code class="px-1 py-0.5 rounded bg-[var(--secondary,#e2e8f0)]">Win + Shift + S</code> 或 <code class="px-1 py-0.5 rounded bg-[var(--secondary,#e2e8f0)]">Ctrl + C</code>。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">確定放大（隱藏其他鍵）</strong>：點擊「確定放大顯示」後，未選取的按鍵會全部消失，僅保留選中按鍵大幅放大，讓全班學生一眼看清。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">自由排列方式</strong>：放大後可切換「左右橫排」、「上下直排」、「置中／上下左右對齊」，或切換為「自由移動」用滑鼠拖曳按鍵擺放位置。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">大字功能說明</strong>：自動辨識 30 多組常用快速鍵功能（如「截圖（區域截圖）」、「複製」、「貼上」），也可在輸入框自由修改大字標題。</li>
+          </ul>
+        </section>
+
+        <section class="space-y-1.5">
+          <h3 class="font-bold text-base text-[var(--primary,#2563eb)]">三、「實況打字 / 語音演示」模式</h3>
+          <ul class="list-disc pl-5 space-y-1 text-xs text-[var(--muted-foreground,#64748b)]">
+            <li><strong class="text-[var(--foreground,#0f172a)]">實體鍵盤實況同步</strong>：點擊上方大字輸入框並直接打字（支援中文注音與英文），下方 104 鍵盤會即時亮燈按下對應按鍵。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">注音按鍵歷程</strong>：輸入中文時會同步顯示拆解後的注音按鍵（例如「如」→ <code class="px-1 py-0.5 rounded bg-[var(--secondary,#e2e8f0)]">如 → ㄖ ㄨ ˊ</code>），可隨時點「清除歷程」清空。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">口說自動打字與文字演示</strong>：點擊「🎤 口說自動打字」（或貼上文字後點「▶ 演示打字動畫」），即可逐鍵演示打字；可用滑桿自由調整每鍵間隔（<strong>0.1 秒 ～ 5.0 秒</strong>）。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">🗣️ 朗讀注音 / 字母</strong>：勾選後，每按一個注音或英文字母都會自動發音朗讀，拼出國字時也會讀出該字。</li>
+            <li><strong class="text-[var(--foreground,#0f172a)]">⏺ 錄製過程 / 🎬 錄影下載</strong>：可按「⏺ 錄製過程」記錄按鍵、文字、注音與語音並在課堂「▶ 重播錄製」，或點「🎬 錄影下載」匯出 <code class="px-1 py-0.5 rounded bg-[var(--secondary,#e2e8f0)]">.webm</code> 教學影片。</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="pt-2 border-t border-[var(--border,#cbd5e1)] flex justify-end">
+        <button id="btnCloseHelpBottom" type="button" class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary,#2563eb)] text-[var(--primary-foreground,#ffffff)] hover:opacity-90">
+          我知道了
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const helpModal = document.getElementById('helpModal');
+    const btnHelp = document.getElementById('btnHelp');
+    const btnCloseHelp = document.getElementById('btnCloseHelp');
+    const btnCloseHelpBottom = document.getElementById('btnCloseHelpBottom');
+
+    function openHelp() { helpModal.classList.remove('hidden'); }
+    function closeHelp() { helpModal.classList.add('hidden'); }
+
+    btnHelp.addEventListener('click', openHelp);
+    btnCloseHelp.addEventListener('click', closeHelp);
+    btnCloseHelpBottom.addEventListener('click', closeHelp);
+    helpModal.addEventListener('click', (e) => {
+      if (e.target === helpModal) closeHelp();
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !helpModal.classList.contains('hidden')) {
+        closeHelp();
+      }
+    });
   </script>
 </body>
 </html>
