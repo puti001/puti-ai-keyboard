@@ -644,16 +644,16 @@
             TAIWAN 104-KEY · TEACHING KEYBOARD
           </span>
           <div class="flex items-center gap-5 pr-3 text-[10px] font-bold" style="color: var(--mod-text);">
-            <div class="flex flex-col items-center gap-1">
-              <span class="w-2 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]"></span>
+            <div class="flex flex-col items-center gap-1" title="Num Lock 燈號">
+              <span id="ledNumLock" class="w-2.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] transition-all"></span>
               <span class="opacity-75">1</span>
             </div>
-            <div class="flex flex-col items-center gap-1">
-              <span class="w-2 h-1 rounded-full bg-zinc-500/50"></span>
+            <div class="flex flex-col items-center gap-1" title="Caps Lock 大寫燈號">
+              <span id="ledCapsLock" class="w-2.5 h-1.5 rounded-full bg-zinc-500/40 transition-all"></span>
               <span class="opacity-75">A</span>
             </div>
-            <div class="flex flex-col items-center gap-1">
-              <span class="w-2 h-1 rounded-full bg-zinc-500/50"></span>
+            <div class="flex flex-col items-center gap-1" title="Scroll Lock 燈號">
+              <span id="ledScrollLock" class="w-2.5 h-1.5 rounded-full bg-zinc-500/40 transition-all"></span>
               <span class="opacity-75">⬇</span>
             </div>
           </div>
@@ -2089,6 +2089,7 @@
     });
 
     window.addEventListener('keyup', (e) => {
+      syncLedsFromEvent(e);
       const btn = keyboardView.querySelector(`[data-key-id="${e.code}"]`);
       if (btn) btn.classList.remove('is-pressing', 'is-live-glow');
       if (appMode === 'live' && ALL_KEYS_MAP.has(e.code)) {
@@ -2096,9 +2097,43 @@
       }
     });
 
+    // --- Lock Status LEDs (NumLock, CapsLock, ScrollLock) ---
+    const ledNumLock = document.getElementById('ledNumLock');
+    const ledCapsLock = document.getElementById('ledCapsLock');
+    const ledScrollLock = document.getElementById('ledScrollLock');
+    const lockState = { NumLock: true, CapsLock: false, ScrollLock: false };
+
+    function renderLockLeds() {
+      const onCls = 'w-2.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] transition-all';
+      const offCls = 'w-2.5 h-1.5 rounded-full bg-zinc-500/40 transition-all';
+      ledNumLock.className = lockState.NumLock ? onCls : offCls;
+      ledCapsLock.className = lockState.CapsLock ? onCls : offCls;
+      ledScrollLock.className = lockState.ScrollLock ? onCls : offCls;
+    }
+
+    function syncLedsFromEvent(e) {
+      if (typeof e.getModifierState !== 'function') return;
+      lockState.NumLock = e.getModifierState('NumLock');
+      lockState.CapsLock = e.getModifierState('CapsLock');
+      lockState.ScrollLock = e.getModifierState('ScrollLock');
+      renderLockLeds();
+    }
+
+    window.addEventListener('keydown', syncLedsFromEvent, true);
+    keyboardView.addEventListener('click', (e) => {
+      const btn = e.target.closest('.keycap');
+      if (!btn) return;
+      const id = btn.dataset.keyId;
+      if (id === 'CapsLock' || id === 'NumLock' || id === 'ScrollLock') {
+        lockState[id] = !lockState[id];
+        renderLockLeds();
+      }
+    });
+
     // Init
     renderKeyboard();
     updateSelectionUI();
+    renderLockLeds();
   </script>
 
   <!-- Help / User Guide Modal -->
