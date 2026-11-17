@@ -1,0 +1,2096 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puti-AI 擬真台灣標準鍵盤 — 複選放大教學版</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* Keycap Theme Palettes */
+    .kb-theme-black {
+      --chassis-bg: linear-gradient(160deg, #27292d 0%, #18191c 100%);
+      --chassis-border: #3a3d42;
+      --chassis-inner: #0e0f11;
+      --key-bg: linear-gradient(180deg, #26282c 0%, #1c1d20 100%);
+      --key-side: #111214;
+      --key-border: #36393f;
+      --key-text: #f3f4f6;
+      --key-sub: #d1d5db;
+      --mod-bg: linear-gradient(180deg, #222428 0%, #191a1d 100%);
+      --mod-side: #0f1012;
+      --mod-text: #e5e7eb;
+      --sel-ring: #fbbf24;
+      --sel-glow: rgba(251, 191, 36, 0.55);
+      --sel-led: #fbbf24;
+    }
+
+    .kb-theme-classic {
+      --chassis-bg: linear-gradient(145deg, #d6d3cd, #b8b4ac);
+      --chassis-border: #9a958c;
+      --chassis-inner: #2b2927;
+      --key-bg: linear-gradient(180deg, #f7f5f0 0%, #eae6dd 100%);
+      --key-side: #c8c2b6;
+      --key-border: #d5d0c5;
+      --key-text: #1f1e1c;
+      --key-sub: #57534e;
+      --mod-bg: linear-gradient(180deg, #dedad1 0%, #ccc7bc 100%);
+      --mod-side: #a6a095;
+      --mod-text: #292524;
+      --sel-ring: #f59e0b;
+      --sel-glow: rgba(245, 158, 11, 0.45);
+      --sel-led: #f59e0b;
+    }
+
+    .kb-theme-ocean {
+      --chassis-bg: linear-gradient(145deg, #cbd5e1, #94a3b8);
+      --chassis-border: #64748b;
+      --chassis-inner: #1e293b;
+      --key-bg: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+      --key-side: #b4c0cf;
+      --key-border: #cbd5e1;
+      --key-text: #0f172a;
+      --key-sub: #475569;
+      --mod-bg: linear-gradient(180deg, #475569 0%, #334155 100%);
+      --mod-side: #1e293b;
+      --mod-text: #f8fafc;
+      --sel-ring: #38bdf8;
+      --sel-glow: rgba(56, 189, 248, 0.5);
+      --sel-led: #38bdf8;
+    }
+
+    /* Realistic Chassis */
+    .keyboard-chassis {
+      background: var(--chassis-bg);
+      border: 1px solid var(--chassis-border);
+      border-radius: 16px;
+      padding: 16px 18px 20px;
+      box-shadow:
+        0 24px 48px -12px rgba(0, 0, 0, 0.45),
+        0 8px 16px -4px rgba(0, 0, 0, 0.25),
+        inset 0 1px 1px rgba(255, 255, 255, 0.14),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.35);
+      transition: all 0.35s ease;
+    }
+
+    .keyboard-well {
+      background: var(--chassis-inner);
+      border-radius: 8px;
+      padding: 6px;
+      box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    /* 3D Sculpted Keycap */
+    .keycap {
+      position: relative;
+      height: 46px;
+      border-radius: 6px;
+      background: var(--key-side);
+      padding-bottom: 4px;
+      cursor: pointer;
+      transition:
+        transform 0.08s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
+      box-shadow:
+        0 3px 5px rgba(0, 0, 0, 0.45),
+        0 1px 2px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .keycap-top {
+      flex: 1;
+      width: 100%;
+      border-radius: 5px;
+      background: var(--key-bg);
+      border: 1px solid var(--key-border);
+      padding: 3px 5px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: 1fr 1fr;
+      align-items: center;
+      box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.14),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Modifiers & Single-label keys */
+    .keycap.is-mod {
+      background: var(--mod-side);
+    }
+    .keycap.is-mod .keycap-top {
+      background: var(--mod-bg);
+      color: var(--mod-text);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 4px 6px;
+    }
+    .keycap.is-center .keycap-top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4px;
+    }
+
+    .keycap:hover {
+      filter: brightness(1.12);
+    }
+
+    .keycap:active,
+    .keycap.is-pressing {
+      transform: translateY(3px);
+      padding-bottom: 1px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .keycap.is-live-glow {
+      outline: 2px solid #38bdf8;
+      outline-offset: 1px;
+      box-shadow:
+        0 0 18px rgba(56, 189, 248, 0.65),
+        0 1px 2px rgba(0, 0, 0, 0.5);
+      z-index: 3;
+    }
+
+    /* Selected state */
+    .keycap.is-selected {
+      outline: 2px solid var(--sel-ring);
+      outline-offset: 1px;
+      box-shadow:
+        0 0 16px var(--sel-glow),
+        0 3px 5px rgba(0, 0, 0, 0.45);
+      z-index: 2;
+    }
+
+    .keycap .sel-indicator {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 6px;
+      height: 6px;
+      border-radius: 9999px;
+      background: var(--sel-led);
+      box-shadow: 0 0 6px var(--sel-led);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      pointer-events: none;
+    }
+
+    .keycap.is-selected .sel-indicator {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Quadrant Typography matching photo */
+    .q-tl {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--key-text);
+      text-align: left;
+      align-self: start;
+    }
+    .q-tr {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: 9px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--key-sub);
+      text-align: right;
+      align-self: start;
+      padding-left: 2px;
+    }
+    .q-bl {
+      grid-column: 1;
+      grid-row: 2;
+      font-size: 9.5px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--key-sub);
+      text-align: left;
+      align-self: end;
+    }
+    .q-br {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: 9.5px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--key-sub);
+      text-align: right;
+      align-self: end;
+      padding-left: 2px;
+    }
+    /* On number keys, bottom-left number is slightly bolder like the photo */
+    .q-bl.is-num {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--key-text);
+    }
+    .q-tl.is-sym {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--key-sub);
+    }
+
+    .mod-label {
+      font-size: 10.5px;
+      font-weight: 500;
+      line-height: 1.15;
+      color: var(--mod-text);
+      white-space: pre-line;
+    }
+
+    /* Zoomed-in Stage Keycaps */
+    .zoom-stage {
+      position: relative;
+      min-height: 360px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      padding: 36px 28px;
+      border-radius: 20px;
+      background: radial-gradient(circle at 50% 45%, rgba(128, 128, 128, 0.1), transparent 75%);
+      animation: stageFadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      overflow: hidden;
+    }
+
+    .zoom-stage.layout-row {
+      flex-direction: row;
+    }
+
+    .zoom-stage.layout-col {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      min-height: 440px;
+    }
+
+    .zoom-stage.layout-free {
+      display: block;
+      min-height: 480px;
+      padding: 0;
+    }
+
+    /* Alignment helpers for row / col */
+    .zoom-stage.layout-row.align-center { justify-content: center; align-items: center; align-content: center; }
+    .zoom-stage.layout-row.align-top    { justify-content: center; align-items: flex-start; align-content: flex-start; }
+    .zoom-stage.layout-row.align-bottom { justify-content: center; align-items: flex-end; align-content: flex-end; }
+    .zoom-stage.layout-row.align-left   { justify-content: flex-start; align-items: center; align-content: center; }
+    .zoom-stage.layout-row.align-right  { justify-content: flex-end; align-items: center; align-content: center; }
+
+    .zoom-stage.layout-col.align-center { justify-content: center; align-items: center; }
+    .zoom-stage.layout-col.align-top    { justify-content: flex-start; align-items: center; }
+    .zoom-stage.layout-col.align-bottom { justify-content: flex-end; align-items: center; }
+    .zoom-stage.layout-col.align-left   { justify-content: center; align-items: flex-start; }
+    .zoom-stage.layout-col.align-right  { justify-content: center; align-items: flex-end; }
+
+    .zoom-stage.layout-free .zoom-keycap {
+      position: absolute;
+      cursor: grab;
+      touch-action: none;
+      animation: none;
+    }
+
+    .zoom-stage.layout-free .zoom-keycap.is-dragging {
+      cursor: grabbing;
+      transition: none;
+      box-shadow:
+        0 28px 46px -8px rgba(0, 0, 0, 0.6),
+        0 10px 18px rgba(0, 0, 0, 0.35);
+      transform: scale(1.03);
+    }
+
+    @keyframes stageFadeIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes keyPopIn {
+      from { opacity: 0; transform: scale(0.65) translateY(16px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .zoom-keycap {
+      position: relative;
+      height: 138px;
+      min-width: 138px;
+      border-radius: 16px;
+      background: var(--key-side);
+      padding-bottom: 12px;
+      cursor: pointer;
+      box-shadow:
+        0 20px 35px -8px rgba(0, 0, 0, 0.5),
+        0 6px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, padding-bottom 0.08s ease;
+      animation: keyPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+
+    .zoom-keycap.is-mod {
+      background: var(--mod-side);
+    }
+
+    .zoom-keycap-top {
+      flex: 1;
+      width: 100%;
+      border-radius: 14px;
+      background: var(--key-bg);
+      border: 2px solid var(--key-border);
+      padding: 12px 16px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: 1fr 1fr;
+      align-items: center;
+      box-shadow:
+        inset 0 3px 6px rgba(255, 255, 255, 0.18),
+        inset 0 -5px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .zoom-keycap.is-mod .zoom-keycap-top {
+      background: var(--mod-bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 14px 18px;
+    }
+
+    .zoom-keycap.is-center .zoom-keycap-top {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 14px;
+    }
+
+    .zoom-keycap:active,
+    .zoom-keycap.is-pressing {
+      transform: translateY(8px);
+      padding-bottom: 4px;
+      box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Enlarged Quadrant Typography */
+    .zq-tl {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 38px;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--key-text);
+      text-align: left;
+      align-self: start;
+    }
+    .zq-tr {
+      grid-column: 2;
+      grid-row: 1;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--key-sub);
+      text-align: right;
+      align-self: start;
+      padding-left: 8px;
+    }
+    .zq-bl {
+      grid-column: 1;
+      grid-row: 2;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--key-sub);
+      text-align: left;
+      align-self: end;
+    }
+    .zq-br {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--key-sub);
+      text-align: right;
+      align-self: end;
+      padding-left: 8px;
+    }
+    .zq-bl.is-num {
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--key-text);
+    }
+    .zq-tl.is-sym {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--key-sub);
+    }
+    .zmod-label {
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--mod-text);
+      white-space: pre-line;
+    }
+
+    .plus-connector {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--muted-foreground);
+      opacity: 0.65;
+      animation: keyPopIn 0.35s ease backwards;
+    }
+
+    .kb-scroll-wrap {
+      overflow-x: auto;
+      padding: 6px 4px 14px;
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased min-h-screen p-3 md:p-5">
+  <div id="app" class="max-w-[1160px] mx-auto space-y-4 kb-theme-black">
+
+    <!-- Header & Controls -->
+    <header class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
+      <div>
+        <h1 class="text-lg font-bold tracking-tight flex items-center gap-2">
+          <span>Puti-AI 擬真台灣標準 104 鍵盤</span>
+          <span id="modeBadge" class="text-xs font-medium px-2 py-0.5 rounded-full bg-[var(--secondary)] text-[var(--secondary-foreground)]">
+            選取模式
+          </span>
+        </h1>
+        <p id="helperText" class="text-xs text-[var(--muted-foreground)] mt-0.5">
+          參照標準台灣鍵帽字型排版（英文＋注音＋倉頡/大易），點擊按鍵可複選，確定後放大顯示並隱藏其他按鍵。
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <!-- App Mode Switcher -->
+        <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--card)] p-0.5">
+          <button id="btnModeSelect" type="button" class="px-2.5 py-1 rounded-md font-semibold transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]">
+            選取放大
+          </button>
+          <button id="btnModeLive" type="button" class="px-2.5 py-1 rounded-md font-semibold transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+            實況打字 / 語音演示
+          </button>
+        </div>
+
+        <!-- Legend Mode -->
+        <select id="legendSelect" aria-label="鍵帽字元顯示" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-medium cursor-pointer">
+          <option value="full">完整標示 (英+注音+倉頡/大易)</option>
+          <option value="zhuyin">英數 + 注音</option>
+          <option value="en">純英數標示</option>
+        </select>
+
+        <!-- Theme Selector -->
+        <select id="themeSelect" aria-label="鍵盤風格" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-medium cursor-pointer">
+          <option value="black">霧面經典黑 (同附圖)</option>
+          <option value="classic">經典復古白</option>
+          <option value="ocean">海洋莫蘭迪藍</option>
+        </select>
+
+        <!-- Sound Toggle -->
+        <button id="btnSound" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] font-medium transition-colors flex items-center gap-1.5" title="切換按鍵音效">
+          <span id="soundIcon">🔊</span>
+          <span id="soundLabel">音效開</span>
+        </button>
+
+        <!-- Physical Keyboard Sync -->
+        <button id="btnPhysical" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] font-medium transition-colors flex items-center gap-1.5" title="用實體鍵盤按鍵直接選取/取消">
+          <span id="physDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>實體鍵盤同步</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Selection Bar (Select & Enlarge Mode) -->
+    <section id="selectionBar" class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[var(--card)] border border-[var(--border)]">
+      <div class="flex flex-wrap items-center gap-2 min-h-[32px] flex-1">
+        <span class="text-xs font-medium text-[var(--muted-foreground)] shrink-0">已選按鍵：</span>
+        <div id="selectedChips" class="flex flex-wrap items-center gap-1.5">
+          <span class="text-xs text-[var(--muted-foreground)] italic">尚未選擇任何按鍵</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button id="btnClear" type="button" disabled class="px-3 py-1.5 rounded-lg text-xs font-medium border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] hover:bg-[var(--secondary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+          清除重選
+        </button>
+        <button id="btnConfirm" type="button" disabled class="px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm">
+          確定放大顯示 (0)
+        </button>
+        <button id="btnBack" type="button" class="hidden px-4 py-1.5 rounded-lg text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition-all shadow-sm">
+          ← 返回完整鍵盤
+        </button>
+      </div>
+    </section>
+
+    <!-- Live Typing & Speech Demo Panel -->
+    <section id="livePanel" class="hidden space-y-3 p-4 rounded-xl bg-[var(--card)] border border-[var(--border)]">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <select id="speechLang" aria-label="語音辨識語言" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] font-medium cursor-pointer">
+            <option value="zh-TW">語音：繁體中文 (台灣)</option>
+            <option value="en-US">語音：English (US)</option>
+          </select>
+
+          <button id="btnVoice" type="button" class="px-3 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors flex items-center gap-1.5">
+            <span id="voiceIcon">🎤</span>
+            <span id="voiceLabel">口說自動打字</span>
+          </button>
+
+          <span class="text-[var(--border)]">|</span>
+
+          <label class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--background)]">
+            <span class="text-[var(--muted-foreground)] font-medium">每鍵間隔：</span>
+            <input id="demoSpeed" type="range" min="0.1" max="5.0" step="0.1" value="0.8" class="w-24 accent-[var(--primary)] cursor-pointer" />
+            <span id="demoSpeedLabel" class="font-mono font-semibold tabular-nums min-w-[48px] text-right">0.8 秒</span>
+          </label>
+
+          <button id="btnDemoPlay" type="button" class="px-3 py-1.5 rounded-lg font-semibold bg-[var(--primary)] text-[var(--primary-foreground)] hover:opacity-90 transition-opacity">
+            ▶ 演示打字動畫
+          </button>
+
+          <button id="btnDemoStop" type="button" class="hidden px-3 py-1.5 rounded-lg font-semibold bg-rose-600 text-white hover:opacity-90 transition-opacity">
+            ⏹ 停止演示
+          </button>
+
+          <button id="btnLiveClear" type="button" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] font-medium transition-colors">
+            清除螢幕
+          </button>
+
+          <label class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--background)] cursor-pointer font-medium">
+            <input id="chkSpeakKeys" type="checkbox" checked class="accent-[var(--primary)] rounded" />
+            <span>🗣️ 朗讀注音/字母</span>
+          </label>
+
+          <span class="text-[var(--border)]">|</span>
+
+          <button id="btnRecAction" type="button" class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors flex items-center gap-1.5" title="錄製打字過程（按鍵、文字、注音與語音）並在頁面內重播">
+            <span id="recDot" class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span id="recLabel">錄製過程</span>
+          </button>
+
+          <button id="btnReplayAction" type="button" disabled class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+            ▶ 重播錄製
+          </button>
+
+          <button id="btnScreenRec" type="button" class="px-2.5 py-1.5 rounded-lg font-semibold border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--secondary)] transition-colors" title="錄製畫面與聲音並下載成影片檔 (.webm)">
+            🎬 錄影下載
+          </button>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-[var(--muted-foreground)]">目前按鍵：</span>
+          <span id="liveKeyBadge" class="font-mono font-semibold px-2.5 py-1 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] min-w-[72px] text-center">
+            待機中
+          </span>
+        </div>
+      </div>
+
+      <textarea id="liveInput" rows="2" placeholder="可直接在此打字（支援中/英輸入法實況同步），或貼上文字後按「▶ 演示打字動畫」，也可點「🎤 口說自動打字」..." class="w-full p-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] text-2xl md:text-3xl font-bold leading-snug resize-none focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"></textarea>
+
+      <!-- Live Zhuyin Breakdown Bar -->
+      <div id="liveZhuyinBar" class="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-lg bg-[var(--background)] border border-[var(--border)] text-sm min-h-[42px]">
+        <div class="flex flex-wrap items-center gap-2 flex-1">
+          <span class="text-xs font-medium text-[var(--muted-foreground)] shrink-0">注音按鍵歷程：</span>
+          <div id="liveZhuyinDisplay" class="flex flex-wrap items-center gap-1.5 font-bold text-base">
+            <span class="text-xs font-normal text-[var(--muted-foreground)] italic">輸入中文時會在此顯示注音按鍵（例如「如」：ㄖ ㄨ ˊ）</span>
+          </div>
+        </div>
+        <button id="btnClearHistory" type="button" class="px-2.5 py-1 rounded-md text-xs font-medium border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors shrink-0">
+          清除歷程
+        </button>
+      </div>
+
+      <div id="liveStatusMsg" class="text-xs text-[var(--muted-foreground)]">
+        提示：在上方輸入框打字時，下方鍵盤會即時亮起並按下對應按鍵；中文演示模式會自動拆解常見注音鍵位。
+      </div>
+    </section>
+
+    <!-- Full Realistic 104-Key Keyboard View -->
+    <main id="keyboardView" class="kb-scroll-wrap">
+      <div class="keyboard-chassis mx-auto min-w-[1040px]">
+        <!-- Top Bar with Status LEDs (1, A, Scroll) -->
+        <div class="flex items-center justify-between px-2 pb-2.5">
+          <span class="text-[11px] font-mono tracking-widest uppercase opacity-50" style="color: var(--mod-text);">
+            TAIWAN 104-KEY · TEACHING KEYBOARD
+          </span>
+          <div class="flex items-center gap-5 pr-3 text-[10px] font-bold" style="color: var(--mod-text);">
+            <div class="flex flex-col items-center gap-1">
+              <span class="w-2 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_#fbbf24]"></span>
+              <span class="opacity-75">1</span>
+            </div>
+            <div class="flex flex-col items-center gap-1">
+              <span class="w-2 h-1 rounded-full bg-zinc-500/50"></span>
+              <span class="opacity-75">A</span>
+            </div>
+            <div class="flex flex-col items-center gap-1">
+              <span class="w-2 h-1 rounded-full bg-zinc-500/50"></span>
+              <span class="opacity-75">⬇</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Zone 104-Key Grid: Main Block + Nav Cluster + Numpad -->
+        <div class="flex gap-3 items-stretch">
+          <!-- Zone 1: Main Alphanumeric Block -->
+          <div class="flex-[15] space-y-2.5">
+            <!-- Function Row (Esc + F1-F4 + F5-F8 + F9-F12) -->
+            <div id="fnRowMain" class="keyboard-well flex items-center gap-1"></div>
+            <!-- Main 5 Rows -->
+            <div id="mainBlock" class="keyboard-well space-y-1"></div>
+          </div>
+
+          <!-- Zone 2: Navigation & Arrow Cluster -->
+          <div class="flex-[3] flex flex-col justify-between space-y-2.5">
+            <div id="fnRowNav" class="keyboard-well flex gap-1"></div>
+            <div class="flex-1 flex flex-col justify-between space-y-2">
+              <div id="navBlock" class="keyboard-well space-y-1"></div>
+              <div id="arrowBlock" class="keyboard-well space-y-1"></div>
+            </div>
+          </div>
+
+          <!-- Zone 3: Numpad -->
+          <div class="flex-[4] flex flex-col justify-end">
+            <div class="h-[58px] flex items-center justify-center opacity-20 text-xs font-mono" style="color: var(--mod-text);">
+              NUMPAD
+            </div>
+            <div id="numpadBlock" class="keyboard-well flex-1"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Enlarged Focus View (Selected Keys Only) -->
+    <section id="zoomView" class="hidden space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3 px-1">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="font-medium text-[var(--muted-foreground)]">呈現方式：</span>
+          <div class="inline-flex rounded-lg border border-[var(--border)] bg-[var(--card)] p-0.5">
+            <button id="btnLayoutRow" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]">
+              左右橫排
+            </button>
+            <button id="btnLayoutCol" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+              上下直排
+            </button>
+            <button id="btnLayoutFree" type="button" class="px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]">
+              自由移動
+            </button>
+          </div>
+
+          <!-- Alignment selector (for Row / Col) -->
+          <select id="alignSelect" aria-label="對齊位置" class="px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] font-medium cursor-pointer">
+            <option value="center">置中對齊</option>
+            <option value="top">靠上對齊</option>
+            <option value="bottom">靠下對齊</option>
+            <option value="left">靠左對齊</option>
+            <option value="right">靠右對齊</option>
+          </select>
+
+          <!-- Reset free positions button -->
+          <button id="btnResetPos" type="button" class="hidden px-2.5 py-1.5 rounded-lg border border-[var(--border)] bg-[var(--card)] hover:bg-[var(--secondary)] font-medium transition-colors">
+            重設位置
+          </button>
+
+          <label id="plusToggleWrap" class="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] cursor-pointer ml-1">
+            <input id="chkShowPlus" type="checkbox" checked class="accent-[var(--primary)] rounded" />
+            顯示「+」符號
+          </label>
+
+          <label class="inline-flex items-center gap-1.5 text-xs text-[var(--muted-foreground)] cursor-pointer ml-1">
+            <input id="chkShowFunc" type="checkbox" checked class="accent-[var(--primary)] rounded" />
+            顯示功能大字
+          </label>
+
+          <input id="funcTextInput" type="text" placeholder="自訂功能說明（如：截圖）" class="px-2.5 py-1 rounded-lg border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] text-xs w-44 focus:outline-none focus:ring-1 focus:ring-[var(--primary)]" />
+        </div>
+
+        <span id="zoomHintText" class="text-xs text-[var(--muted-foreground)]">
+          提示：可直接點擊放大的按鍵示範「按下」效果，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] font-mono">Esc</kbd> 返回完整鍵盤
+        </span>
+      </div>
+
+      <!-- Large Function Title Banner -->
+      <div id="funcBanner" class="hidden text-center py-3 px-4 rounded-2xl bg-[var(--card)] border border-[var(--border)] shadow-sm">
+        <div class="text-xs font-medium text-[var(--muted-foreground)] mb-1">按鍵功能</div>
+        <div id="funcDisplay" class="text-3xl md:text-5xl font-extrabold tracking-tight text-[var(--foreground)]"></div>
+      </div>
+
+      <div id="zoomStage" class="zoom-stage layout-row align-center border border-[var(--border)] bg-[var(--card)]"></div>
+    </section>
+
+  </div>
+
+  <script>
+    // --- Web Audio Switch Sound ---
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function playClickSound(isDown = true) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        const filter = audioCtx.createBiquadFilter();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(isDown ? 200 : 260, now);
+        osc.frequency.exponentialRampToValueAtTime(isDown ? 65 : 90, now + 0.032);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1350, now);
+
+        gain.gain.setValueAtTime(isDown ? 0.2 : 0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.045);
+      } catch (_) {}
+    }
+
+    // --- 104-Key Taiwanese Layout Data (Matching Photo) ---
+    // quad: { tl, tr (Zhuyin), bl (Num/Cangjie/Sym), br (Dayi/Ch), isNumRow }
+    const FN_MAIN = [
+      { id: 'Escape', label: 'Esc', w: 1, mod: true },
+      { spacer: 0.7 },
+      { id: 'F1', label: 'F1', w: 1, mod: true },
+      { id: 'F2', label: 'F2', w: 1, mod: true },
+      { id: 'F3', label: 'F3', w: 1, mod: true },
+      { id: 'F4', label: 'F4', w: 1, mod: true },
+      { spacer: 0.45 },
+      { id: 'F5', label: 'F5', w: 1, mod: true },
+      { id: 'F6', label: 'F6', w: 1, mod: true },
+      { id: 'F7', label: 'F7', w: 1, mod: true },
+      { id: 'F8', label: 'F8', w: 1, mod: true },
+      { spacer: 0.45 },
+      { id: 'F9', label: 'F9', w: 1, mod: true },
+      { id: 'F10', label: 'F10', w: 1, mod: true },
+      { id: 'F11', label: 'F11', w: 1, mod: true },
+      { id: 'F12', label: 'F12', w: 1, mod: true }
+    ];
+
+    const FN_NAV = [
+      { id: 'PrintScreen', label: 'PrtScn\nSysRq', w: 1, mod: true },
+      { id: 'ScrollLock', label: 'Scroll\nLock', w: 1, mod: true },
+      { id: 'Pause', label: 'Pause\nBreak', w: 1, mod: true }
+    ];
+
+    const MAIN_ROWS = [
+      // Row 1: Numbers
+      [
+        { id: 'Backquote', tl: '~', bl: '`', br: '巷', isNumRow: true, w: 1 },
+        { id: 'Digit1', tl: '!', tr: 'ㄅ', bl: '1', br: '言', isNumRow: true, w: 1 },
+        { id: 'Digit2', tl: '@', tr: 'ㄉ', bl: '2', br: '牛', isNumRow: true, w: 1 },
+        { id: 'Digit3', tl: '#', tr: 'ˇ', bl: '3', br: '目', isNumRow: true, w: 1 },
+        { id: 'Digit4', tl: '$', tr: 'ˋ', bl: '4', br: '四', isNumRow: true, w: 1 },
+        { id: 'Digit5', tl: '%', tr: 'ㄓ', bl: '5', br: '王', isNumRow: true, w: 1 },
+        { id: 'Digit6', tl: '^', tr: 'ˊ', bl: '6', br: '門', isNumRow: true, w: 1 },
+        { id: 'Digit7', tl: '&', tr: '˙', bl: '7', br: '田', isNumRow: true, w: 1 },
+        { id: 'Digit8', tl: '*', tr: 'ㄚ', bl: '8', br: '米', isNumRow: true, w: 1 },
+        { id: 'Digit9', tl: '(', tr: 'ㄞ', bl: '9', br: '足', isNumRow: true, w: 1 },
+        { id: 'Digit0', tl: ')', tr: 'ㄢ', bl: '0', br: '金', isNumRow: true, w: 1 },
+        { id: 'Minus', tl: '_', tr: '儿', bl: '-', br: '鄉', isNumRow: true, w: 1 },
+        { id: 'Equal', tl: '+', bl: '=', isNumRow: true, w: 1 },
+        { id: 'Backspace', label: '← Backspace', w: 2, mod: true }
+      ],
+      // Row 2: QWERTY
+      [
+        { id: 'Tab', label: 'Tab ⇥', w: 1.5, mod: true },
+        { id: 'KeyQ', tl: 'Q', tr: 'ㄆ', bl: '手', br: '石', w: 1 },
+        { id: 'KeyW', tl: 'W', tr: 'ㄊ', bl: '田', br: '山', w: 1 },
+        { id: 'KeyE', tl: 'E', tr: 'ㄍ', bl: '水', br: '一', w: 1 },
+        { id: 'KeyR', tl: 'R', tr: 'ㄐ', bl: '口', br: '工', w: 1 },
+        { id: 'KeyT', tl: 'T', tr: 'ㄔ', bl: '廿', br: '系', w: 1 },
+        { id: 'KeyY', tl: 'Y', tr: 'ㄗ', bl: '卜', br: '火', w: 1 },
+        { id: 'KeyU', tl: 'U', tr: 'ㄧ', bl: '山', br: '艸', w: 1 },
+        { id: 'KeyI', tl: 'I', tr: 'ㄛ', bl: '戈', br: '木', w: 1 },
+        { id: 'KeyO', tl: 'O', tr: 'ㄟ', bl: '人', br: '口', w: 1 },
+        { id: 'KeyP', tl: 'P', tr: 'ㄣ', bl: '心', br: '耳', w: 1 },
+        { id: 'BracketLeft', tl: '{', bl: '[', br: '路', isNumRow: true, w: 1 },
+        { id: 'BracketRight', tl: '}', bl: ']', br: '街', isNumRow: true, w: 1 },
+        { id: 'Backslash', tl: '|', bl: '\\', br: '鎮', isNumRow: true, w: 1.5 }
+      ],
+      // Row 3: ASDF
+      [
+        { id: 'CapsLock', label: 'Caps Lock', w: 1.75, mod: true },
+        { id: 'KeyA', tl: 'A', tr: 'ㄇ', bl: '日', br: '人', w: 1 },
+        { id: 'KeyS', tl: 'S', tr: 'ㄋ', bl: '尸', br: '革', w: 1 },
+        { id: 'KeyD', tl: 'D', tr: 'ㄎ', bl: '木', br: '日', w: 1 },
+        { id: 'KeyF', tl: 'F', tr: 'ㄑ', bl: '火', br: '土', w: 1 },
+        { id: 'KeyG', tl: 'G', tr: 'ㄕ', bl: '土', br: '手', w: 1 },
+        { id: 'KeyH', tl: 'H', tr: 'ㄘ', bl: '竹', br: '鳥', w: 1 },
+        { id: 'KeyJ', tl: 'J', tr: 'ㄨ', bl: '十', br: '月', w: 1 },
+        { id: 'KeyK', tl: 'K', tr: 'ㄜ', bl: '大', br: '立', w: 1 },
+        { id: 'KeyL', tl: 'L', tr: 'ㄠ', bl: '中', br: '文', w: 1 },
+        { id: 'Semicolon', tl: ':', tr: 'ㄤ', bl: ';', br: '虫', isNumRow: true, w: 1 },
+        { id: 'Quote', tl: '"', bl: "'", br: '號', isNumRow: true, w: 1 },
+        { id: 'Enter', label: 'Enter ↵', w: 2.25, mod: true }
+      ],
+      // Row 4: ZXCV
+      [
+        { id: 'ShiftLeft', label: '⇧ Shift', w: 2.25, mod: true },
+        { id: 'KeyZ', tl: 'Z', tr: 'ㄈ', bl: '重', br: '心', w: 1 },
+        { id: 'KeyX', tl: 'X', tr: 'ㄌ', bl: '難', br: '水', w: 1 },
+        { id: 'KeyC', tl: 'C', tr: 'ㄏ', bl: '金', br: '鹿', w: 1 },
+        { id: 'KeyV', tl: 'V', tr: 'ㄒ', bl: '女', br: '禾', w: 1 },
+        { id: 'KeyB', tl: 'B', tr: 'ㄖ', bl: '月', br: '馬', w: 1 },
+        { id: 'KeyN', tl: 'N', tr: 'ㄙ', bl: '弓', br: '魚', w: 1 },
+        { id: 'KeyM', tl: 'M', tr: 'ㄩ', bl: '一', br: '雨', w: 1 },
+        { id: 'Comma', tl: '<', tr: 'ㄝ', bl: ',', br: '力', isNumRow: true, w: 1 },
+        { id: 'Period', tl: '>', tr: 'ㄡ', bl: '.', br: '舟', isNumRow: true, w: 1 },
+        { id: 'Slash', tl: '?', tr: 'ㄥ', bl: '/', br: '竹', isNumRow: true, w: 1 },
+        { id: 'ShiftRight', label: '⇧ Shift', w: 2.75, mod: true }
+      ],
+      // Row 5: Bottom Modifiers
+      [
+        { id: 'ControlLeft', label: 'Ctrl', w: 1.25, mod: true },
+        { id: 'MetaLeft', label: '⊞', w: 1.25, mod: true, center: true },
+        { id: 'AltLeft', label: 'Alt', w: 1.25, mod: true },
+        { id: 'Space', label: 'Space', w: 6.25, mod: true, center: true, hideLabelOnBoard: true },
+        { id: 'AltRight', label: 'Alt', w: 1.25, mod: true },
+        { id: 'MetaRight', label: '⊞', w: 1.25, mod: true, center: true },
+        { id: 'ContextMenu', label: '▤', w: 1.25, mod: true, center: true },
+        { id: 'ControlRight', label: 'Ctrl', w: 1.25, mod: true }
+      ]
+    ];
+
+    const NAV_ROWS = [
+      [
+        { id: 'Insert', label: 'Insert', w: 1, mod: true },
+        { id: 'Home', label: 'Home', w: 1, mod: true },
+        { id: 'PageUp', label: 'Page\nUp', w: 1, mod: true }
+      ],
+      [
+        { id: 'Delete', label: 'Delete', w: 1, mod: true },
+        { id: 'End', label: 'End', w: 1, mod: true },
+        { id: 'PageDown', label: 'Page\nDown', w: 1, mod: true }
+      ]
+    ];
+
+    const ARROW_ROWS = [
+      [
+        { spacer: 1 },
+        { id: 'ArrowUp', label: '↑', w: 1, mod: true, center: true },
+        { spacer: 1 }
+      ],
+      [
+        { id: 'ArrowLeft', label: '←', w: 1, mod: true, center: true },
+        { id: 'ArrowDown', label: '↓', w: 1, mod: true, center: true },
+        { id: 'ArrowRight', label: '→', w: 1, mod: true, center: true }
+      ]
+    ];
+
+    const NUMPAD_KEYS = [
+      { id: 'NumLock', label: 'Num\nLock', mod: true, col: 1, row: 1 },
+      { id: 'NumpadDivide', label: '/', mod: true, col: 2, row: 1, center: true },
+      { id: 'NumpadMultiply', label: '*', mod: true, col: 3, row: 1, center: true },
+      { id: 'NumpadSubtract', label: '-', mod: true, col: 4, row: 1, center: true },
+
+      { id: 'Numpad7', tl: '7', bl: 'Home', isNumRow: false, col: 1, row: 2 },
+      { id: 'Numpad8', tl: '8', bl: '↑', isNumRow: false, col: 2, row: 2 },
+      { id: 'Numpad9', tl: '9', bl: 'PgUp', isNumRow: false, col: 3, row: 2 },
+      { id: 'NumpadAdd', label: '+', mod: true, col: 4, row: 2, rowSpan: 2, center: true },
+
+      { id: 'Numpad4', tl: '4', bl: '←', isNumRow: false, col: 1, row: 3 },
+      { id: 'Numpad5', tl: '5', bl: '', isNumRow: false, col: 2, row: 3 },
+      { id: 'Numpad6', tl: '6', bl: '→', isNumRow: false, col: 3, row: 3 },
+
+      { id: 'Numpad1', tl: '1', bl: 'End', isNumRow: false, col: 1, row: 4 },
+      { id: 'Numpad2', tl: '2', bl: '↓', isNumRow: false, col: 2, row: 4 },
+      { id: 'Numpad3', tl: '3', bl: 'PgDn', isNumRow: false, col: 3, row: 4 },
+      { id: 'NumpadEnter', label: 'Enter', mod: true, col: 4, row: 4, rowSpan: 2, center: true },
+
+      { id: 'Numpad0', tl: '0', bl: 'Ins', isNumRow: false, col: 1, row: 5, colSpan: 2 },
+      { id: 'NumpadDecimal', tl: '.', bl: 'Del', isNumRow: false, col: 3, row: 5 }
+    ];
+
+    // --- State ---
+    let legendMode = 'full'; // 'full' | 'zhuyin' | 'en'
+    let currentTheme = 'black';
+    let physicalSync = true;
+    let isZoomed = false;
+    let selectedIds = [];
+
+    // --- DOM Refs ---
+    const appEl = document.getElementById('app');
+    const fnRowMain = document.getElementById('fnRowMain');
+    const mainBlock = document.getElementById('mainBlock');
+    const fnRowNav = document.getElementById('fnRowNav');
+    const navBlock = document.getElementById('navBlock');
+    const arrowBlock = document.getElementById('arrowBlock');
+    const numpadBlock = document.getElementById('numpadBlock');
+    const keyboardView = document.getElementById('keyboardView');
+    const zoomView = document.getElementById('zoomView');
+    const zoomStage = document.getElementById('zoomStage');
+    const selectedChipsEl = document.getElementById('selectedChips');
+    const btnClear = document.getElementById('btnClear');
+    const btnConfirm = document.getElementById('btnConfirm');
+    const btnBack = document.getElementById('btnBack');
+    const modeBadge = document.getElementById('modeBadge');
+    const helperText = document.getElementById('helperText');
+    const legendSelect = document.getElementById('legendSelect');
+    const themeSelect = document.getElementById('themeSelect');
+    const btnSound = document.getElementById('btnSound');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundLabel = document.getElementById('soundLabel');
+    const btnPhysical = document.getElementById('btnPhysical');
+    const physDot = document.getElementById('physDot');
+    const chkShowPlus = document.getElementById('chkShowPlus');
+
+    function getAllKeysMap() {
+      const map = new Map();
+      const addList = (arr) => arr.forEach((k) => { if (k.id) map.set(k.id, k); });
+      addList(FN_MAIN);
+      addList(FN_NAV);
+      MAIN_ROWS.forEach(addList);
+      NAV_ROWS.forEach(addList);
+      ARROW_ROWS.forEach(addList);
+      addList(NUMPAD_KEYS);
+      return map;
+    }
+
+    const ALL_KEYS_MAP = getAllKeysMap();
+
+    function createKeycapButton(k, isZoom = false) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.dataset.keyId = k.id;
+
+      const baseCls = isZoom ? 'zoom-keycap' : 'keycap';
+      let cls = baseCls;
+      if (k.mod) cls += ' is-mod';
+      if (k.center) cls += ' is-center';
+      if (!isZoom && selectedIds.includes(k.id)) cls += ' is-selected';
+      btn.className = cls;
+
+      const top = document.createElement('div');
+      top.className = isZoom ? 'zoom-keycap-top' : 'keycap-top';
+
+      if (k.mod) {
+        const span = document.createElement('span');
+        span.className = isZoom ? 'zmod-label' : 'mod-label';
+        span.textContent = (!isZoom && k.hideLabelOnBoard) ? '' : k.label;
+        top.appendChild(span);
+      } else {
+        // 2x2 Quadrant Layout
+        const prefix = isZoom ? 'zq' : 'q';
+
+        if (k.tl) {
+          const tl = document.createElement('span');
+          tl.className = `${prefix}-tl` + (k.isNumRow ? ' is-sym' : '');
+          tl.textContent = k.tl;
+          top.appendChild(tl);
+        }
+
+        if (k.tr && (legendMode === 'full' || legendMode === 'zhuyin')) {
+          const tr = document.createElement('span');
+          tr.className = `${prefix}-tr`;
+          tr.textContent = k.tr;
+          top.appendChild(tr);
+        }
+
+        if (k.bl && (k.isNumRow || k.id.startsWith('Numpad') || legendMode === 'full')) {
+          const bl = document.createElement('span');
+          bl.className = `${prefix}-bl` + (k.isNumRow ? ' is-num' : '');
+          bl.textContent = k.bl;
+          top.appendChild(bl);
+        }
+
+        if (k.br && legendMode === 'full') {
+          const br = document.createElement('span');
+          br.className = `${prefix}-br`;
+          br.textContent = k.br;
+          top.appendChild(br);
+        }
+      }
+
+      if (!isZoom) {
+        const led = document.createElement('span');
+        led.className = 'sel-indicator';
+        top.appendChild(led);
+      }
+
+      btn.appendChild(top);
+
+      btn.addEventListener('pointerdown', () => playClickSound(true));
+      if (!isZoom) {
+        btn.addEventListener('click', () => toggleKeySelection(k.id));
+      }
+
+      return btn;
+    }
+
+    function renderRowInto(container, items) {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'flex gap-1 w-full';
+      items.forEach((item) => {
+        if (item.spacer) {
+          const sp = document.createElement('div');
+          sp.style.flex = `${item.spacer} 1 0%`;
+          rowEl.appendChild(sp);
+        } else {
+          const btn = createKeycapButton(item, false);
+          btn.style.flex = `${item.w || 1} 1 0%`;
+          rowEl.appendChild(btn);
+        }
+      });
+      container.appendChild(rowEl);
+    }
+
+    function renderKeyboard() {
+      fnRowMain.innerHTML = '';
+      renderRowInto(fnRowMain, FN_MAIN);
+
+      mainBlock.innerHTML = '';
+      MAIN_ROWS.forEach((r) => renderRowInto(mainBlock, r));
+
+      fnRowNav.innerHTML = '';
+      renderRowInto(fnRowNav, FN_NAV);
+
+      navBlock.innerHTML = '';
+      NAV_ROWS.forEach((r) => renderRowInto(navBlock, r));
+
+      arrowBlock.innerHTML = '';
+      ARROW_ROWS.forEach((r) => renderRowInto(arrowBlock, r));
+
+      // Render Numpad with CSS Grid
+      numpadBlock.innerHTML = '';
+      const grid = document.createElement('div');
+      grid.className = 'grid grid-cols-4 grid-rows-5 gap-1 h-full';
+      NUMPAD_KEYS.forEach((k) => {
+        const btn = createKeycapButton(k, false);
+        btn.style.gridColumn = k.colSpan ? `${k.col} / span ${k.colSpan}` : `${k.col}`;
+        btn.style.gridRow = k.rowSpan ? `${k.row} / span ${k.rowSpan}` : `${k.row}`;
+        if (k.rowSpan) btn.style.height = '100%';
+        grid.appendChild(btn);
+      });
+      numpadBlock.appendChild(grid);
+    }
+
+    function getChipLabel(k) {
+      if (k.mod) return k.label.replace('\n', ' ');
+      if (k.isNumRow) return `${k.bl} (${k.tl})`;
+      return k.tr ? `${k.tl} ${k.tr}` : k.tl;
+    }
+
+    function toggleKeySelection(id) {
+      const idx = selectedIds.indexOf(id);
+      if (idx === -1) selectedIds.push(id);
+      else selectedIds.splice(idx, 1);
+      updateSelectionUI();
+    }
+
+    function updateSelectionUI() {
+      const allBtns = keyboardView.querySelectorAll('.keycap');
+      allBtns.forEach((btn) => {
+        btn.classList.toggle('is-selected', selectedIds.includes(btn.dataset.keyId));
+      });
+
+      if (selectedIds.length === 0) {
+        selectedChipsEl.innerHTML = '<span class="text-xs text-[var(--muted-foreground)] italic">尚未選擇任何按鍵</span>';
+      } else {
+        selectedChipsEl.innerHTML = '';
+        selectedIds.forEach((id) => {
+          const k = ALL_KEYS_MAP.get(id);
+          if (!k) return;
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] hover:opacity-80 transition-opacity';
+          chip.title = '點擊移除此按鍵';
+          chip.innerHTML = `<span>${getChipLabel(k)}</span><span class="opacity-60">×</span>`;
+          chip.addEventListener('click', () => {
+            if (isZoomed) return;
+            toggleKeySelection(id);
+          });
+          selectedChipsEl.appendChild(chip);
+        });
+      }
+
+      const count = selectedIds.length;
+      btnClear.disabled = count === 0;
+      btnConfirm.disabled = count === 0;
+      btnConfirm.textContent = `確定放大顯示 (${count})`;
+    }
+
+    const SHORTCUT_LABELS = {
+      'Meta+Shift+KeyS': '截圖（區域截圖）',
+      'PrintScreen': '螢幕截圖',
+      'Alt+PrintScreen': '目前視窗截圖',
+      'Meta+PrintScreen': '全螢幕截圖並存檔',
+      'Ctrl+KeyC': '複製',
+      'Ctrl+KeyV': '貼上',
+      'Ctrl+KeyX': '剪下',
+      'Ctrl+KeyZ': '復原上一步',
+      'Ctrl+KeyY': '重做',
+      'Ctrl+Shift+KeyZ': '重做',
+      'Ctrl+KeyA': '全選',
+      'Ctrl+KeyS': '儲存檔案',
+      'Ctrl+KeyF': '搜尋文字',
+      'Ctrl+KeyH': '取代文字',
+      'Ctrl+KeyP': '列印',
+      'Ctrl+KeyN': '開新視窗 / 新檔案',
+      'Ctrl+KeyO': '開啟舊檔',
+      'Ctrl+KeyT': '開新分頁',
+      'Ctrl+KeyW': '關閉目前分頁',
+      'Ctrl+Shift+KeyT': '重新開啟關閉的分頁',
+      'Ctrl+Shift+KeyN': '開新無痕視窗 / 新資料夾',
+      'Alt+Tab': '切換視窗',
+      'Alt+F4': '關閉程式',
+      'Meta+KeyD': '顯示 / 隱藏桌面',
+      'Meta+KeyL': '鎖定電腦',
+      'Meta+KeyE': '開啟檔案總管',
+      'Meta+KeyV': '開啟剪貼簿歷程',
+      'Meta+Period': '開啟表情符號面板',
+      'Meta+Space': '切換輸入法',
+      'Ctrl+Space': '切換中 / 英輸入法',
+      'Ctrl+Shift': '切換輸入法',
+      'Alt+Shift': '切換輸入法',
+      'Ctrl+Shift+Escape': '開啟工作管理員',
+      'Ctrl+Alt+Delete': '系統安全選項',
+      'F2': '重新命名',
+      'F5': '重新整理',
+      'F11': '全螢幕切換'
+    };
+
+    function normalizeKeyToken(id) {
+      if (id === 'ControlLeft' || id === 'ControlRight') return 'Ctrl';
+      if (id === 'ShiftLeft' || id === 'ShiftRight') return 'Shift';
+      if (id === 'AltLeft' || id === 'AltRight') return 'Alt';
+      if (id === 'MetaLeft' || id === 'MetaRight') return 'Meta';
+      return id;
+    }
+
+    function detectShortcutFunction(ids) {
+      const tokens = Array.from(new Set(ids.map(normalizeKeyToken)));
+      const modOrder = ['Ctrl', 'Meta', 'Alt', 'Shift'];
+      const mods = modOrder.filter((m) => tokens.includes(m));
+      const others = tokens.filter((t) => !modOrder.includes(t)).sort();
+      const canonical = [...mods, ...others].join('+');
+      return SHORTCUT_LABELS[canonical] || '';
+    }
+
+    const chkShowFunc = document.getElementById('chkShowFunc');
+    const funcTextInput = document.getElementById('funcTextInput');
+    const funcBanner = document.getElementById('funcBanner');
+    const funcDisplay = document.getElementById('funcDisplay');
+
+    function updateFunctionBanner() {
+      const text = funcTextInput.value.trim();
+      if (chkShowFunc.checked && text) {
+        funcDisplay.textContent = text;
+        funcBanner.classList.remove('hidden');
+      } else {
+        funcBanner.classList.add('hidden');
+      }
+    }
+
+    chkShowFunc.addEventListener('change', updateFunctionBanner);
+    funcTextInput.addEventListener('input', updateFunctionBanner);
+
+    function enterZoomMode() {
+      if (selectedIds.length === 0) return;
+      isZoomed = true;
+      keyboardView.classList.add('hidden');
+      zoomView.classList.remove('hidden');
+      btnConfirm.classList.add('hidden');
+      btnClear.classList.add('hidden');
+      btnBack.classList.remove('hidden');
+
+      modeBadge.textContent = '放大展示模式';
+      helperText.textContent = '已隱藏其他按鍵，學生可清楚看見您選取的按鍵組合。';
+
+      const detected = detectShortcutFunction(selectedIds);
+      funcTextInput.value = detected;
+      updateFunctionBanner();
+
+      renderZoomStage();
+    }
+
+    function exitZoomMode() {
+      isZoomed = false;
+      zoomView.classList.add('hidden');
+      keyboardView.classList.remove('hidden');
+      btnBack.classList.add('hidden');
+      btnConfirm.classList.remove('hidden');
+      btnClear.classList.remove('hidden');
+
+      modeBadge.textContent = '選取模式';
+      helperText.textContent = '參照標準台灣鍵帽字型排版（英文＋注音＋倉頡/大易），點擊按鍵可複選，確定後放大顯示並隱藏其他按鍵。';
+    }
+
+    let zoomLayout = 'row'; // 'row' | 'col' | 'free'
+    let zoomAlign = 'center'; // 'center' | 'top' | 'bottom' | 'left' | 'right'
+    let freePositions = new Map(); // id -> { x, y }
+    let topZIndex = 10;
+
+    const btnLayoutRow = document.getElementById('btnLayoutRow');
+    const btnLayoutCol = document.getElementById('btnLayoutCol');
+    const btnLayoutFree = document.getElementById('btnLayoutFree');
+    const alignSelect = document.getElementById('alignSelect');
+    const btnResetPos = document.getElementById('btnResetPos');
+    const plusToggleWrap = document.getElementById('plusToggleWrap');
+    const zoomHintText = document.getElementById('zoomHintText');
+
+    function updateZoomControlsUI() {
+      const activeCls = 'px-2.5 py-1 rounded-md font-medium transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]';
+      const idleCls = 'px-2.5 py-1 rounded-md font-medium transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+
+      btnLayoutRow.className = zoomLayout === 'row' ? activeCls : idleCls;
+      btnLayoutCol.className = zoomLayout === 'col' ? activeCls : idleCls;
+      btnLayoutFree.className = zoomLayout === 'free' ? activeCls : idleCls;
+
+      if (zoomLayout === 'free') {
+        alignSelect.classList.add('hidden');
+        plusToggleWrap.classList.add('hidden');
+        btnResetPos.classList.remove('hidden');
+        zoomHintText.innerHTML = '提示：拖曳任意按鍵可自由擺放位置，輕點可示範「按下」，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] font-mono">Esc</kbd> 返回';
+      } else {
+        alignSelect.classList.remove('hidden');
+        plusToggleWrap.classList.remove('hidden');
+        btnResetPos.classList.add('hidden');
+        zoomHintText.innerHTML = '提示：可直接點擊放大的按鍵示範「按下」效果，按 <kbd class="px-1.5 py-0.5 rounded border border-[var(--border)] bg-[var(--card)] font-mono">Esc</kbd> 返回完整鍵盤';
+      }
+    }
+
+    function makeDraggableKeycap(keyEl, keyId) {
+      let startX = 0;
+      let startY = 0;
+      let origLeft = 0;
+      let origTop = 0;
+      let isDragging = false;
+
+      keyEl.addEventListener('pointerdown', (e) => {
+        if (zoomLayout !== 'free') return;
+        e.preventDefault();
+        keyEl.setPointerCapture(e.pointerId);
+        startX = e.clientX;
+        startY = e.clientY;
+        origLeft = parseFloat(keyEl.style.left) || 0;
+        origTop = parseFloat(keyEl.style.top) || 0;
+        isDragging = false;
+        topZIndex += 1;
+        keyEl.style.zIndex = String(topZIndex);
+      });
+
+      keyEl.addEventListener('pointermove', (e) => {
+        if (zoomLayout !== 'free' || !keyEl.hasPointerCapture(e.pointerId)) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        if (!isDragging && Math.hypot(dx, dy) > 4) {
+          isDragging = true;
+          keyEl.classList.add('is-dragging');
+        }
+        if (isDragging) {
+          const maxLeft = Math.max(0, zoomStage.clientWidth - keyEl.offsetWidth - 8);
+          const maxTop = Math.max(0, zoomStage.clientHeight - keyEl.offsetHeight - 8);
+          const nextLeft = Math.min(Math.max(8, origLeft + dx), maxLeft);
+          const nextTop = Math.min(Math.max(8, origTop + dy), maxTop);
+          keyEl.style.left = `${nextLeft}px`;
+          keyEl.style.top = `${nextTop}px`;
+          freePositions.set(keyId, { x: nextLeft, y: nextTop });
+        }
+      });
+
+      keyEl.addEventListener('pointerup', (e) => {
+        if (zoomLayout !== 'free') return;
+        if (keyEl.hasPointerCapture(e.pointerId)) {
+          keyEl.releasePointerCapture(e.pointerId);
+        }
+        if (isDragging) {
+          keyEl.classList.remove('is-dragging');
+        } else {
+          // Brief press animation on tap/click
+          keyEl.classList.add('is-pressing');
+          setTimeout(() => keyEl.classList.remove('is-pressing'), 120);
+        }
+        isDragging = false;
+      });
+    }
+
+    function renderZoomStage() {
+      const showPlus = chkShowPlus.checked;
+      zoomStage.innerHTML = '';
+      zoomStage.className = `zoom-stage layout-${zoomLayout} align-${zoomAlign} border border-[var(--border)] bg-[var(--card)]`;
+
+      const stageW = zoomStage.clientWidth || 860;
+      const stageH = zoomStage.clientHeight || 480;
+
+      // Calculate default centered grid positions for free mode if not yet set
+      let cursorX = 36;
+      let cursorY = Math.max(36, Math.round((stageH - 138) / 2));
+
+      selectedIds.forEach((id, index) => {
+        const k = ALL_KEYS_MAP.get(id);
+        if (!k) return;
+
+        if (zoomLayout !== 'free' && index > 0 && showPlus) {
+          const plus = document.createElement('span');
+          plus.className = 'plus-connector';
+          plus.style.animationDelay = `${index * 45}ms`;
+          plus.textContent = '+';
+          zoomStage.appendChild(plus);
+        }
+
+        const keyEl = createKeycapButton(k, true);
+        keyEl.style.animationDelay = `${index * 55}ms`;
+        const wFactor = k.w || (k.colSpan ? k.colSpan : 1);
+        const widthPx = Math.max(138, Math.round(wFactor * 124));
+        keyEl.style.width = `${widthPx}px`;
+
+        if (zoomLayout === 'free') {
+          let pos = freePositions.get(id);
+          if (!pos) {
+            if (cursorX + widthPx > stageW - 24) {
+              cursorX = 36;
+              cursorY = Math.min(stageH - 155, cursorY + 160);
+            }
+            pos = { x: cursorX, y: cursorY };
+            freePositions.set(id, pos);
+            cursorX += widthPx + 24;
+          }
+          keyEl.style.left = `${pos.x}px`;
+          keyEl.style.top = `${pos.y}px`;
+          makeDraggableKeycap(keyEl, id);
+        }
+
+        zoomStage.appendChild(keyEl);
+      });
+    }
+
+    // --- Event Listeners ---
+    btnClear.addEventListener('click', () => {
+      selectedIds = [];
+      freePositions.clear();
+      updateSelectionUI();
+    });
+
+    btnConfirm.addEventListener('click', () => {
+      updateZoomControlsUI();
+      enterZoomMode();
+    });
+    btnBack.addEventListener('click', exitZoomMode);
+    chkShowPlus.addEventListener('change', () => {
+      if (isZoomed) renderZoomStage();
+    });
+
+    btnLayoutRow.addEventListener('click', () => {
+      zoomLayout = 'row';
+      updateZoomControlsUI();
+      if (isZoomed) renderZoomStage();
+    });
+
+    btnLayoutCol.addEventListener('click', () => {
+      zoomLayout = 'col';
+      updateZoomControlsUI();
+      if (isZoomed) renderZoomStage();
+    });
+
+    btnLayoutFree.addEventListener('click', () => {
+      zoomLayout = 'free';
+      updateZoomControlsUI();
+      if (isZoomed) renderZoomStage();
+    });
+
+    alignSelect.addEventListener('change', (e) => {
+      zoomAlign = e.target.value;
+      if (isZoomed) renderZoomStage();
+    });
+
+    btnResetPos.addEventListener('click', () => {
+      freePositions.clear();
+      if (isZoomed) renderZoomStage();
+    });
+
+    legendSelect.addEventListener('change', (e) => {
+      legendMode = e.target.value;
+      renderKeyboard();
+      updateSelectionUI();
+      if (isZoomed) renderZoomStage();
+    });
+
+    themeSelect.addEventListener('change', (e) => {
+      appEl.classList.remove(`kb-theme-${currentTheme}`);
+      currentTheme = e.target.value;
+      appEl.classList.add(`kb-theme-${currentTheme}`);
+    });
+
+    btnSound.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundIcon.textContent = soundEnabled ? '🔊' : '🔇';
+      soundLabel.textContent = soundEnabled ? '音效開' : '靜音';
+    });
+
+    btnPhysical.addEventListener('click', () => {
+      physicalSync = !physicalSync;
+      physDot.className = `w-2 h-2 rounded-full ${physicalSync ? 'bg-emerald-500' : 'bg-gray-400'}`;
+    });
+
+    // --- App Mode: 'select' | 'live' ---
+    let appMode = 'select';
+    const btnModeSelect = document.getElementById('btnModeSelect');
+    const btnModeLive = document.getElementById('btnModeLive');
+    const selectionBar = document.getElementById('selectionBar');
+    const livePanel = document.getElementById('livePanel');
+    const liveInput = document.getElementById('liveInput');
+    const liveKeyBadge = document.getElementById('liveKeyBadge');
+    const liveStatusMsg = document.getElementById('liveStatusMsg');
+    const speechLang = document.getElementById('speechLang');
+    const btnVoice = document.getElementById('btnVoice');
+    const voiceIcon = document.getElementById('voiceIcon');
+    const voiceLabel = document.getElementById('voiceLabel');
+    const demoSpeed = document.getElementById('demoSpeed');
+    const btnDemoPlay = document.getElementById('btnDemoPlay');
+    const btnDemoStop = document.getElementById('btnDemoStop');
+    const btnLiveClear = document.getElementById('btnLiveClear');
+
+    function setAppMode(mode) {
+      appMode = mode;
+      const activeCls = 'px-2.5 py-1 rounded-md font-semibold transition-colors bg-[var(--primary)] text-[var(--primary-foreground)]';
+      const idleCls = 'px-2.5 py-1 rounded-md font-semibold transition-colors text-[var(--muted-foreground)] hover:text-[var(--foreground)]';
+
+      btnModeSelect.className = mode === 'select' ? activeCls : idleCls;
+      btnModeLive.className = mode === 'live' ? activeCls : idleCls;
+
+      if (mode === 'live') {
+        if (isZoomed) exitZoomMode();
+        selectionBar.classList.add('hidden');
+        livePanel.classList.remove('hidden');
+        modeBadge.textContent = '實況打字 / 演示模式';
+        helperText.textContent = '直接在下方輸入框打字即可即時同步鍵盤按鍵，或使用「口說自動打字」與「演示打字動畫」。';
+        setTimeout(() => liveInput.focus(), 50);
+      } else {
+        stopDemoPlayback();
+        stopVoiceRecognition();
+        livePanel.classList.add('hidden');
+        selectionBar.classList.remove('hidden');
+        modeBadge.textContent = '選取模式';
+        helperText.textContent = '參照標準台灣鍵帽字型排版（英文＋注音＋倉頡/大易），點擊按鍵可複選，確定後放大顯示並隱藏其他按鍵。';
+      }
+    }
+
+    btnModeSelect.addEventListener('click', () => setAppMode('select'));
+    btnModeLive.addEventListener('click', () => setAppMode('live'));
+
+    // --- Character -> Keystroke Mapping (English + Zhuyin) ---
+    const ZHUYIN_KEY_MAP = {
+      'ㄅ': 'Digit1', 'ㄆ': 'KeyQ', 'ㄇ': 'KeyA', 'ㄈ': 'KeyZ',
+      'ㄉ': 'Digit2', 'ㄊ': 'KeyW', 'ㄋ': 'KeyS', 'ㄌ': 'KeyX',
+      'ㄍ': 'KeyE', 'ㄎ': 'KeyD', 'ㄏ': 'KeyC',
+      'ㄐ': 'KeyR', 'ㄑ': 'KeyF', 'ㄒ': 'KeyV',
+      'ㄓ': 'Digit5', 'ㄔ': 'KeyT', 'ㄕ': 'KeyG', 'ㄖ': 'KeyB',
+      'ㄗ': 'KeyY', 'ㄘ': 'KeyH', 'ㄙ': 'KeyN',
+      'ㄧ': 'KeyU', 'ㄨ': 'KeyJ', 'ㄩ': 'KeyM',
+      'ㄚ': 'Digit8', 'ㄛ': 'KeyI', 'ㄜ': 'KeyK', 'ㄝ': 'Comma',
+      'ㄞ': 'Digit9', 'ㄟ': 'KeyO', 'ㄠ': 'KeyL', 'ㄡ': 'Period',
+      'ㄢ': 'Digit0', 'ㄣ': 'KeyP', 'ㄤ': 'Semicolon', 'ㄥ': 'Slash',
+      '儿': 'Minus',
+      'ˉ': 'Space', 'ˊ': 'Digit6', 'ˇ': 'Digit3', 'ˋ': 'Digit4', '˙': 'Digit7'
+    };
+
+    const CODE_TO_ZHUYIN = Object.fromEntries(
+      Object.entries(ZHUYIN_KEY_MAP).map(([z, code]) => [code, z === 'ˉ' ? '空白(一聲)' : z])
+    );
+
+    // Common Traditional Chinese characters -> Zhuyin sequence for realistic classroom typing demo
+    const CH_ZHUYIN = {
+      '你': 'ㄋㄧˇ', '好': 'ㄏㄠˇ', '我': 'ㄨㄛˇ', '是': 'ㄕˋ', '的': 'ㄉㄜ˙', '在': 'ㄗㄞˋ',
+      '有': 'ㄧㄡˇ', '和': 'ㄏㄢˋ', '不': 'ㄅㄨˋ', '這': 'ㄓㄜˋ', '那': 'ㄋㄚˋ', '個': 'ㄍㄜ˙',
+      '人': 'ㄖㄣˊ', '們': 'ㄇㄣ˙', '大': 'ㄉㄚˋ', '小': 'ㄒㄧㄠˇ', '中': 'ㄓㄨㄥˉ', '文': 'ㄨㄣˊ',
+      '英': 'ㄧㄥˉ', '學': 'ㄒㄩㄝˊ', '生': 'ㄕㄥˉ', '老': 'ㄌㄠˇ', '師': 'ㄕˉ', '課': 'ㄎㄜˋ',
+      '電': 'ㄉㄧㄢˋ', '腦': 'ㄋㄠˇ', '鍵': 'ㄐㄧㄢˋ', '盤': 'ㄆㄢˊ', '打': 'ㄉㄚˇ', '字': 'ㄗˋ',
+      '截': 'ㄐㄧㄝˊ', '圖': 'ㄊㄨˊ', '複': 'ㄈㄨˋ', '製': 'ㄓˋ', '貼': 'ㄊㄧㄝˉ', '上': 'ㄕㄤˋ',
+      '下': 'ㄒㄧㄚˋ', '左': 'ㄗㄨㄛˇ', '右': 'ㄧㄡˋ', '請': 'ㄑㄧㄥˇ', '問': 'ㄨㄣˋ', '謝': 'ㄒㄧㄝˋ',
+      '歡': 'ㄏㄨㄢˉ', '迎': 'ㄧㄥˊ', '來': 'ㄌㄞˊ', '到': 'ㄉㄠˋ', '今': 'ㄐㄧㄣˉ', '天': 'ㄊㄧㄢˉ',
+      '要': 'ㄧㄠˋ', '用': 'ㄩㄥˋ', '按': 'ㄢˋ', '開': 'ㄎㄞˉ', '始': 'ㄕˇ', '關': 'ㄍㄨㄢˉ',
+      '閉': 'ㄅㄧˋ', '存': 'ㄘㄨㄣˊ', '檔': 'ㄉㄤˇ', '案': 'ㄢˋ', '網': 'ㄨㄤˇ', '頁': 'ㄧㄝˋ',
+      '搜': 'ㄙㄡˉ', '尋': 'ㄒㄩㄣˊ', '看': 'ㄎㄢˋ', '見': 'ㄐㄧㄢˋ', '聽': 'ㄊㄧㄥˉ', '說': 'ㄕㄨㄛˉ',
+      '一': 'ㄧˉ', '二': 'ㄦˋ', '三': 'ㄙㄢˉ', '四': 'ㄙˋ', '五': 'ㄨˇ', '六': 'ㄌㄧㄡˋ',
+      '七': 'ㄑㄧˉ', '八': 'ㄅㄚˉ', '九': 'ㄐㄧㄡˇ', '十': 'ㄕˊ', '嗎': 'ㄇㄚ˙', '呢': 'ㄋㄜ˙',
+      '可': 'ㄎㄜˇ', '以': 'ㄧˇ', '做': 'ㄗㄨㄛˋ', '什': 'ㄕㄣˊ', '麼': 'ㄇㄜ˙', '怎': 'ㄗㄣˇ',
+      '樣': 'ㄧㄤˋ', '能': 'ㄋㄥˊ', '會': 'ㄏㄨㄟˋ', '想': 'ㄒㄧㄤˇ', '知': 'ㄓˉ', '道': 'ㄉㄠˋ',
+      '把': 'ㄅㄚˇ', '他': 'ㄊㄚˉ', '她': 'ㄊㄚˉ', '它': 'ㄊㄚˉ', '很': 'ㄏㄣˇ', '都': 'ㄉㄡˉ',
+      '也': 'ㄧㄝˇ', '就': 'ㄐㄧㄡˋ', '還': 'ㄏㄞˊ', '再': 'ㄗㄞˋ', '讓': 'ㄖㄤˋ', '給': 'ㄍㄟˇ',
+      '從': 'ㄘㄨㄥˊ', '對': 'ㄉㄨㄟˋ', '錯': 'ㄘㄨㄛˋ', '真': 'ㄓㄣˉ', '棒': 'ㄅㄤˋ', '讚': 'ㄗㄢˋ',
+      '演': 'ㄧㄢˇ', '示': 'ㄕˋ', '測': 'ㄘㄜˋ', '試': 'ㄕˋ', '功': 'ㄍㄨㄥˉ', '快': 'ㄎㄨㄞˋ',
+      '速': 'ㄙㄨˋ', '慢': 'ㄇㄢˋ', '點': 'ㄉㄧㄢˇ', '擊': 'ㄐㄧˊ', '選': 'ㄒㄩㄢˇ', '取': 'ㄑㄩˇ',
+      '放': 'ㄈㄤˋ', '顯': 'ㄒㄧㄢˇ', '家': 'ㄐㄧㄚˉ', '早': 'ㄗㄠˇ', '安': 'ㄢˉ', '晚': 'ㄨㄢˇ',
+      '如': 'ㄖㄨˊ', '果': 'ㄍㄨㄛˇ', '例': 'ㄌㄧˋ', '為': 'ㄨㄟˋ', '因': 'ㄧㄣˉ', '所': 'ㄙㄨㄛˇ',
+      '但': 'ㄉㄢˋ', '而': 'ㄦˊ', '與': 'ㄩˇ', '及': 'ㄐㄧˊ', '或': 'ㄏㄨㄛˋ', '已': 'ㄧˇ',
+      '經': 'ㄐㄧㄥˉ', '將': 'ㄐㄧㄤˉ', '被': 'ㄅㄟˋ', '使': 'ㄕˇ', '向': 'ㄒㄧㄤˋ', '往': 'ㄨㄤˇ',
+      '於': 'ㄩˊ', '比': 'ㄅㄧˇ', '更': 'ㄍㄥˋ', '最': 'ㄗㄨㄟˋ', '太': 'ㄊㄞˋ', '非': 'ㄈㄟˉ',
+      '常': 'ㄔㄤˊ', '多': 'ㄉㄨㄛˉ', '少': 'ㄕㄠˇ', '高': 'ㄍㄠˉ', '低': 'ㄉㄧˉ', '長': 'ㄔㄤˊ',
+      '短': 'ㄉㄨㄢˇ', '新': 'ㄒㄧㄣˉ', '舊': 'ㄐㄧㄡˋ', '美': 'ㄇㄟˇ', '麗': 'ㄌㄧˋ', '風': 'ㄈㄥˉ',
+      '雨': 'ㄩˇ', '雲': 'ㄩㄣˊ', '山': 'ㄕㄢˉ', '水': 'ㄕㄨㄟˇ', '火': 'ㄏㄨㄛˇ', '木': 'ㄇㄨˋ',
+      '金': 'ㄐㄧㄣˉ', '土': 'ㄊㄨˇ', '日': 'ㄖˋ', '月': 'ㄩㄝˋ', '星': 'ㄒㄧㄥˉ', '光': 'ㄍㄨㄤˉ',
+      '色': 'ㄙㄜˋ', '紅': 'ㄏㄨㄥˊ', '藍': 'ㄌㄢˊ', '綠': 'ㄌㄩˋ', '黃': 'ㄏㄨㄤˊ', '白': 'ㄅㄞˊ',
+      '黑': 'ㄏㄟˉ', '書': 'ㄕㄨˉ', '本': 'ㄅㄣˇ', '筆': 'ㄅㄧˇ', '紙': 'ㄓˇ', '桌': 'ㄓㄨㄛˉ',
+      '椅': 'ㄧˇ', '門': 'ㄇㄣˊ', '窗': 'ㄔㄨㄤˉ', '車': 'ㄔㄜˉ', '船': 'ㄔㄨㄢˊ', '飛': 'ㄈㄟˉ',
+      '機': 'ㄐㄧˉ', '路': 'ㄌㄨˋ', '街': 'ㄐㄧㄝˉ', '校': 'ㄒㄧㄠˋ', '園': 'ㄩㄢˊ', '班': 'ㄅㄢˉ',
+      '級': 'ㄐㄧˊ', '友': 'ㄧㄡˇ', '朋': 'ㄆㄥˊ', '同': 'ㄊㄨㄥˊ', '爸': 'ㄅㄚˋ', '媽': 'ㄇㄚˉ',
+      '哥': 'ㄍㄜˉ', '姐': 'ㄐㄧㄝˇ', '弟': 'ㄉㄧˋ', '妹': 'ㄇㄟˋ', '吃': 'ㄔˉ', '喝': 'ㄏㄜˉ',
+      '睡': 'ㄕㄨㄟˋ', '覺': 'ㄐㄩㄝˊ', '走': 'ㄗㄡˇ', '跑': 'ㄆㄠˇ', '跳': 'ㄊㄧㄠˋ', '笑': 'ㄒㄧㄠˋ',
+      '愛': 'ㄞˋ', '喜': 'ㄒㄧˇ', '樂': 'ㄌㄜˋ', '寫': 'ㄒㄧㄝˇ', '讀': 'ㄉㄨˊ', '畫': 'ㄏㄨㄚˋ',
+      '唱': 'ㄔㄤˋ', '歌': 'ㄍㄜˉ', '玩': 'ㄨㄢˊ', '遊': 'ㄧㄡˊ', '戲': 'ㄒㄧˋ', '題': 'ㄊㄧˊ',
+      '答': 'ㄉㄚˊ', '記': 'ㄐㄧˋ', '得': 'ㄉㄜˊ', '忘': 'ㄨㄤˋ', '幫': 'ㄅㄤˉ', '助': 'ㄓㄨˋ',
+      '希': 'ㄒㄧˉ', '望': 'ㄨㄤˋ', '祝': 'ㄓㄨˋ', '福': 'ㄈㄨˊ', '起': 'ㄑㄧˇ', '沒': 'ㄇㄟˊ',
+      '係': 'ㄒㄧˋ', '假': 'ㄐㄧㄚˇ', '設': 'ㄕㄜˋ', '計': 'ㄐㄧˋ', '算': 'ㄙㄨㄢˋ', '數': 'ㄕㄨˋ',
+      '理': 'ㄌㄧˇ', '化': 'ㄏㄨㄚˋ', '國': 'ㄍㄨㄛˊ', '社': 'ㄕㄜˋ', '體': 'ㄊㄧˇ', '育': 'ㄩˋ',
+      '音': 'ㄧㄣˉ', '術': 'ㄕㄨˋ', '資': 'ㄗˉ', '訊': 'ㄒㄩㄣˋ', '程': 'ㄔㄥˊ', '式': 'ㄕˋ',
+      '碼': 'ㄇㄚˇ', '軟': 'ㄖㄨㄢˇ', '硬': 'ㄧㄥˋ', '站': 'ㄓㄢˋ', '連': 'ㄌㄧㄢˊ', '線': 'ㄒㄧㄢˋ',
+      '載': 'ㄗㄞˋ', '傳': 'ㄔㄨㄢˊ', '送': 'ㄙㄨㄥˋ', '收': 'ㄕㄡˉ', '件': 'ㄐㄧㄢˋ', '信': 'ㄒㄧㄣˋ',
+      '息': 'ㄒㄧˉ', '照': 'ㄓㄠˋ', '片': 'ㄆㄧㄢˋ', '影': 'ㄧㄥˇ', '聲': 'ㄕㄥˉ', '台': 'ㄊㄞˊ',
+      '灣': 'ㄨㄢˉ', '北': 'ㄅㄟˇ', '南': 'ㄋㄢˊ', '東': 'ㄉㄨㄥˉ', '西': 'ㄒㄧˉ', '應': 'ㄧㄥˉ',
+      '該': 'ㄍㄞˉ', '出': 'ㄔㄨˉ', '進': 'ㄐㄧㄣˋ', '入': 'ㄖㄨˋ', '輸': 'ㄕㄨˉ', '呈': 'ㄔㄥˊ',
+      '現': 'ㄒㄧㄢˋ', '注': 'ㄓㄨˋ', '什': 'ㄕㄣˊ', '每': 'ㄇㄟˇ', '秒': 'ㄇㄧㄠˇ', '分': 'ㄈㄣˉ'
+    };
+
+    const liveZhuyinDisplay = document.getElementById('liveZhuyinDisplay');
+    let liveImeBuffer = [];
+
+    function renderZhuyinSteps(targetChar, zhuyinSeq, activeIdx = -1) {
+      liveZhuyinDisplay.innerHTML = '';
+      if (targetChar) {
+        const charBadge = document.createElement('span');
+        charBadge.className = 'px-2 py-0.5 rounded-md bg-[var(--primary)] text-[var(--primary-foreground)] text-sm font-bold';
+        charBadge.textContent = targetChar;
+        liveZhuyinDisplay.appendChild(charBadge);
+
+        const arrow = document.createElement('span');
+        arrow.className = 'text-[var(--muted-foreground)] text-xs';
+        arrow.textContent = '→';
+        liveZhuyinDisplay.appendChild(arrow);
+      }
+
+      zhuyinSeq.forEach((sym, i) => {
+        const pill = document.createElement('span');
+        const isActive = i === activeIdx;
+        pill.className = isActive
+          ? 'px-2 py-0.5 rounded-md bg-sky-500 text-white shadow-sm scale-105 transition-all text-base'
+          : 'px-2 py-0.5 rounded-md bg-[var(--secondary)] text-[var(--secondary-foreground)] border border-[var(--border)] text-base';
+        pill.textContent = sym === 'ˉ' ? '一聲(空白)' : sym;
+        liveZhuyinDisplay.appendChild(pill);
+      });
+    }
+
+    const SHIFT_CHAR_MAP = {
+      '~': 'Backquote', '!': 'Digit1', '@': 'Digit2', '#': 'Digit3', '$': 'Digit4',
+      '%': 'Digit5', '^': 'Digit6', '&': 'Digit7', '*': 'Digit8', '(': 'Digit9',
+      ')': 'Digit0', '_': 'Minus', '+': 'Equal', '{': 'BracketLeft', '}': 'BracketRight',
+      '|': 'Backslash', ':': 'Semicolon', '"': 'Quote', '<': 'Comma', '>': 'Period', '?': 'Slash'
+    };
+
+    const PLAIN_CHAR_MAP = {
+      '`': 'Backquote', '-': 'Minus', '=': 'Equal', '[': 'BracketLeft', ']': 'BracketRight',
+      '\\': 'Backslash', ';': 'Semicolon', "'": 'Quote', ',': 'Comma', '.': 'Period', '/': 'Slash',
+      ' ': 'Space', '\n': 'Enter', '，': 'Comma', '。': 'Period', '！': 'Digit1', '？': 'Slash', '、': 'Backslash'
+    };
+
+    function charToKeySteps(ch) {
+      if (CH_ZHUYIN[ch]) {
+        const seq = CH_ZHUYIN[ch].split('');
+        return seq.map((z) => [ZHUYIN_KEY_MAP[z]].filter(Boolean)).filter((arr) => arr.length > 0);
+      }
+      if (/^[a-z]$/.test(ch)) {
+        return [[`Key${ch.toUpperCase()}`]];
+      }
+      if (/^[A-Z]$/.test(ch)) {
+        return [['ShiftLeft', `Key${ch}`]];
+      }
+      if (/^[0-9]$/.test(ch)) {
+        return [[`Digit${ch}`]];
+      }
+      if (SHIFT_CHAR_MAP[ch]) {
+        return [['ShiftLeft', SHIFT_CHAR_MAP[ch]]];
+      }
+      if (PLAIN_CHAR_MAP[ch]) {
+        return [[PLAIN_CHAR_MAP[ch]]];
+      }
+      // Fallback for unmapped CJK characters: pulse Space as confirmation
+      return [['Space']];
+    }
+
+    function flashKeys(keyIds, durationMs = 110) {
+      const els = [];
+      const labels = [];
+      keyIds.forEach((id) => {
+        const btn = keyboardView.querySelector(`[data-key-id="${id}"]`);
+        if (btn) {
+          btn.classList.add('is-pressing', 'is-live-glow');
+          els.push(btn);
+        }
+        const k = ALL_KEYS_MAP.get(id);
+        if (k) labels.push(getChipLabel(k));
+      });
+      if (labels.length > 0) {
+        liveKeyBadge.textContent = labels.join(' + ');
+      }
+      playClickSound(true);
+      setTimeout(() => {
+        els.forEach((btn) => btn.classList.remove('is-pressing', 'is-live-glow'));
+      }, durationMs);
+    }
+
+    // --- Demo Typing Playback ---
+    let demoAbort = false;
+    let isDemoRunning = false;
+
+    function stopDemoPlayback() {
+      demoAbort = true;
+      isDemoRunning = false;
+      btnDemoPlay.classList.remove('hidden');
+      btnDemoStop.classList.add('hidden');
+    }
+
+    const chkSpeakKeys = document.getElementById('chkSpeakKeys');
+    const btnClearHistory = document.getElementById('btnClearHistory');
+
+    const ZHUYIN_SPEECH_MAP = {
+      'ㄅ': '玻', 'ㄆ': '坡', 'ㄇ': '摸', 'ㄈ': '佛',
+      'ㄉ': '得', 'ㄊ': '特', 'ㄋ': '呢', 'ㄌ': '勒',
+      'ㄍ': '哥', 'ㄎ': '科', 'ㄏ': '喝',
+      'ㄐ': '基', 'ㄑ': '欺', 'ㄒ': '希',
+      'ㄓ': '知', 'ㄔ': '吃', 'ㄕ': '詩', 'ㄖ': '日',
+      'ㄗ': '資', 'ㄘ': '雌', 'ㄙ': '思',
+      'ㄧ': '衣', 'ㄨ': '烏', 'ㄩ': '迂',
+      'ㄚ': '啊', 'ㄛ': '喔', 'ㄜ': '鵝', 'ㄝ': '耶',
+      'ㄞ': '哀', 'ㄟ': '威', 'ㄠ': '熬', 'ㄡ': '歐',
+      'ㄢ': '安', 'ㄣ': '恩', 'ㄤ': '昂', 'ㄥ': '亨',
+      '儿': '兒',
+      'ˉ': '一聲', 'ˊ': '二聲', 'ˇ': '三聲', 'ˋ': '四聲', '˙': '輕聲',
+      '空白(一聲)': '一聲'
+    };
+
+    function speakText(text, lang = 'zh-TW') {
+      if (!chkSpeakKeys.checked || !text) return;
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang;
+        utter.rate = 1.15;
+        window.speechSynthesis.speak(utter);
+      } catch (_) {}
+    }
+
+    function speakZhuyinOrChar(sym) {
+      if (ZHUYIN_SPEECH_MAP[sym]) {
+        speakText(ZHUYIN_SPEECH_MAP[sym], 'zh-TW');
+      } else if (/^[a-zA-Z0-9]$/.test(sym)) {
+        speakText(sym.toUpperCase(), 'en-US');
+      } else if (sym === ' ') {
+        speakText('空白鍵', 'zh-TW');
+      }
+    }
+
+    function clearZhuyinHistory() {
+      liveImeBuffer = [];
+      liveKeyBadge.textContent = '待機中';
+      liveZhuyinDisplay.innerHTML = '<span class="text-xs font-normal text-[var(--muted-foreground)] italic">輸入中文時會在此顯示注音按鍵（例如「如」：ㄖ ㄨ ˊ）</span>';
+    }
+
+    async function runTypingDemo(text) {
+      if (!text) return;
+      stopDemoPlayback();
+      demoAbort = false;
+      isDemoRunning = true;
+      btnDemoPlay.classList.add('hidden');
+      btnDemoStop.classList.remove('hidden');
+
+      liveInput.value = '';
+
+      for (const ch of text) {
+        if (demoAbort) break;
+        const zhuyinSeq = CH_ZHUYIN[ch] ? CH_ZHUYIN[ch].split('') : null;
+        const steps = charToKeySteps(ch);
+
+        for (let i = 0; i < steps.length; i++) {
+          if (demoAbort) break;
+          const stepKeys = steps[i];
+          if (zhuyinSeq) {
+            renderZhuyinSteps(ch, zhuyinSeq, i);
+            speakZhuyinOrChar(zhuyinSeq[i]);
+          } else {
+            liveZhuyinDisplay.innerHTML = `<span class="text-xs font-normal text-[var(--muted-foreground)]">正在輸入：</span><span class="px-2 py-0.5 rounded-md bg-[var(--secondary)] text-sm">${ch === ' ' ? '空白鍵' : ch}</span>`;
+            if (i === 0) speakZhuyinOrChar(ch);
+          }
+          const sec = parseFloat(demoSpeed.value) || 0.8;
+          const delayMs = Math.round(sec * 1000);
+          const glowMs = Math.min(Math.max(110, Math.round(delayMs * 0.72)), 900);
+          flashKeys(stepKeys, glowMs);
+          await new Promise((r) => setTimeout(r, delayMs));
+        }
+        if (demoAbort) break;
+        liveInput.value += ch;
+        liveInput.scrollTop = liveInput.scrollHeight;
+        if (zhuyinSeq) {
+          speakText(ch, 'zh-TW');
+        }
+      }
+
+      isDemoRunning = false;
+      btnDemoPlay.classList.remove('hidden');
+      btnDemoStop.classList.add('hidden');
+      liveKeyBadge.textContent = '演示完成';
+    }
+
+    const demoSpeedLabelEl = document.getElementById('demoSpeedLabel');
+    demoSpeed.addEventListener('input', () => {
+      const sec = parseFloat(demoSpeed.value) || 0.8;
+      demoSpeedLabelEl.textContent = `${sec.toFixed(1)} 秒`;
+    });
+
+    // Live IME composition tracking for physical Chinese typing
+    liveInput.addEventListener('compositionstart', () => {
+      liveImeBuffer = [];
+    });
+
+    liveInput.addEventListener('compositionupdate', (e) => {
+      if (e.data) {
+        const chars = e.data.replace(/\s+/g, '').split('');
+        if (chars.length > 0) {
+          renderZhuyinSteps('', chars, chars.length - 1);
+        }
+      }
+    });
+
+    liveInput.addEventListener('compositionend', (e) => {
+      if (e.data && liveImeBuffer.length > 0) {
+        renderZhuyinSteps(e.data, liveImeBuffer, -1);
+        speakText(e.data, 'zh-TW');
+      }
+      liveImeBuffer = [];
+    });
+
+    btnDemoPlay.addEventListener('click', () => {
+      const text = liveInput.value.trim() || '你好！歡迎來到電腦課 Hello!';
+      runTypingDemo(text);
+    });
+
+    btnDemoStop.addEventListener('click', stopDemoPlayback);
+
+    btnClearHistory.addEventListener('click', clearZhuyinHistory);
+
+    btnLiveClear.addEventListener('click', () => {
+      stopDemoPlayback();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      liveInput.value = '';
+      clearZhuyinHistory();
+      liveInput.focus();
+    });
+
+    // --- Web Speech API (Voice -> Typing Demo) ---
+    let recognition = null;
+    let isListening = false;
+
+    function stopVoiceRecognition() {
+      if (recognition && isListening) {
+        try { recognition.stop(); } catch (_) {}
+      }
+      isListening = false;
+      voiceIcon.textContent = '🎤';
+      voiceLabel.textContent = '口說自動打字';
+      btnVoice.classList.remove('ring-2', 'ring-rose-500');
+    }
+
+    btnVoice.addEventListener('click', () => {
+      if (isListening) {
+        stopVoiceRecognition();
+        return;
+      }
+      const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRec) {
+        liveStatusMsg.textContent = '此瀏覽器不支援語音辨識，請直接在上方輸入框打字或貼上文字按「▶ 演示打字動畫」。';
+        return;
+      }
+
+      try {
+        recognition = new SpeechRec();
+        recognition.lang = speechLang.value;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.onstart = () => {
+          isListening = true;
+          voiceIcon.textContent = '🔴';
+          voiceLabel.textContent = '聆聽中...（點此停止）';
+          btnVoice.classList.add('ring-2', 'ring-rose-500');
+          liveStatusMsg.textContent = '請對著麥克風說話，辨識完成後將自動在鍵盤上演示打字！';
+        };
+
+        recognition.onresult = (event) => {
+          const transcript = event.results[0]?.[0]?.transcript || '';
+          stopVoiceRecognition();
+          if (transcript) {
+            liveStatusMsg.textContent = `語音辨識結果：「${transcript}」— 正在演示打字...`;
+            runTypingDemo(transcript);
+          }
+        };
+
+        recognition.onerror = (event) => {
+          stopVoiceRecognition();
+          liveStatusMsg.textContent = `無法啟用麥克風 (${event.error})，您可直接在上方輸入框打字或貼上文字演示。`;
+        };
+
+        recognition.onend = () => {
+          stopVoiceRecognition();
+        };
+
+        recognition.start();
+      } catch (err) {
+        stopVoiceRecognition();
+        liveStatusMsg.textContent = '無法啟用麥克風權限，您可直接在上方輸入框打字或貼上文字演示。';
+      }
+    });
+
+    // --- Typing Process Recorder & Replayer (Keys + Text + Zhuyin + Voice) ---
+    const btnRecAction = document.getElementById('btnRecAction');
+    const recDot = document.getElementById('recDot');
+    const recLabel = document.getElementById('recLabel');
+    const btnReplayAction = document.getElementById('btnReplayAction');
+    const btnScreenRec = document.getElementById('btnScreenRec');
+
+    let isRecordingActions = false;
+    let recStartTime = 0;
+    let recordedEvents = [];
+    let isReplaying = false;
+    let replayTimers = [];
+
+    function recordEvent(evt) {
+      if (!isRecordingActions) return;
+      recordedEvents.push({ t: Math.round(performance.now() - recStartTime), ...evt });
+    }
+
+    function stopReplay() {
+      isReplaying = false;
+      replayTimers.forEach((id) => clearTimeout(id));
+      replayTimers = [];
+      btnReplayAction.textContent = '▶ 重播錄製';
+    }
+
+    btnRecAction.addEventListener('click', () => {
+      if (isRecordingActions) {
+        isRecordingActions = false;
+        recLabel.textContent = '錄製過程';
+        recDot.className = 'w-2 h-2 rounded-full bg-rose-500';
+        btnRecAction.classList.remove('ring-2', 'ring-rose-500');
+        btnReplayAction.disabled = recordedEvents.length === 0;
+        liveStatusMsg.textContent = `錄製完成！共記錄 ${recordedEvents.length} 個打字動作，可點擊「▶ 重播錄製」播放。`;
+      } else {
+        stopReplay();
+        recordedEvents = [];
+        recStartTime = performance.now();
+        isRecordingActions = true;
+        recLabel.textContent = '停止錄製';
+        recDot.className = 'w-2 h-2 rounded-full bg-rose-500 animate-ping';
+        btnRecAction.classList.add('ring-2', 'ring-rose-500');
+        btnReplayAction.disabled = true;
+        recordEvent({ type: 'text', value: liveInput.value });
+        liveStatusMsg.textContent = '🔴 正在錄製打字過程（按鍵、文字、注音與語音）... 請開始打字或執行演示。';
+        liveInput.focus();
+      }
+    });
+
+    btnReplayAction.addEventListener('click', () => {
+      if (isReplaying) {
+        stopReplay();
+        return;
+      }
+      if (recordedEvents.length === 0) return;
+
+      stopDemoPlayback();
+      isReplaying = true;
+      btnReplayAction.textContent = '⏹ 停止重播';
+      clearZhuyinHistory();
+
+      const maxT = recordedEvents[recordedEvents.length - 1].t;
+      recordedEvents.forEach((evt) => {
+        const timerId = setTimeout(() => {
+          if (!isReplaying) return;
+          if (evt.type === 'keydown') {
+            const btn = keyboardView.querySelector(`[data-key-id="${evt.code}"]`);
+            if (btn) btn.classList.add('is-pressing', 'is-live-glow');
+            const k = ALL_KEYS_MAP.get(evt.code);
+            if (k) liveKeyBadge.textContent = getChipLabel(k);
+            playClickSound(true);
+          } else if (evt.type === 'keyup') {
+            const btn = keyboardView.querySelector(`[data-key-id="${evt.code}"]`);
+            if (btn) btn.classList.remove('is-pressing', 'is-live-glow');
+          } else if (evt.type === 'text') {
+            liveInput.value = evt.value;
+            liveInput.scrollTop = liveInput.scrollHeight;
+          } else if (evt.type === 'zhuyin') {
+            renderZhuyinSteps(evt.targetChar, evt.seq, evt.activeIdx);
+          } else if (evt.type === 'speak') {
+            speakText(evt.text, evt.lang || 'zh-TW');
+          }
+        }, evt.t);
+        replayTimers.push(timerId);
+      });
+
+      const endTimer = setTimeout(() => {
+        stopReplay();
+        liveKeyBadge.textContent = '重播完成';
+      }, maxT + 300);
+      replayTimers.push(endTimer);
+    });
+
+    // Capture liveInput text changes & speech for action recording
+    liveInput.addEventListener('input', () => {
+      if (appMode === 'live' && isRecordingActions) {
+        recordEvent({ type: 'text', value: liveInput.value });
+      }
+    });
+
+    // Wrap speakText & renderZhuyinSteps to also log into recordedEvents
+    const _origSpeakText = speakText;
+    speakText = function(text, lang = 'zh-TW') {
+      recordEvent({ type: 'speak', text, lang });
+      _origSpeakText(text, lang);
+    };
+
+    const _origRenderZhuyinSteps = renderZhuyinSteps;
+    renderZhuyinSteps = function(targetChar, zhuyinSeq, activeIdx = -1) {
+      recordEvent({ type: 'zhuyin', targetChar, seq: [...zhuyinSeq], activeIdx });
+      _origRenderZhuyinSteps(targetChar, zhuyinSeq, activeIdx);
+    };
+
+    const _origFlashKeys = flashKeys;
+    flashKeys = function(keyIds, durationMs = 110) {
+      keyIds.forEach((id) => recordEvent({ type: 'keydown', code: id }));
+      setTimeout(() => {
+        keyIds.forEach((id) => recordEvent({ type: 'keyup', code: id }));
+      }, durationMs);
+      _origFlashKeys(keyIds, durationMs);
+    };
+
+    // --- Screen + Audio Video Recorder (.webm download) ---
+    let mediaRecorder = null;
+    let recordedChunks = [];
+
+    btnScreenRec.addEventListener('click', async () => {
+      if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+        return;
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
+        liveStatusMsg.textContent = '此預覽視窗不支援螢幕錄影，請使用「⏺ 錄製過程」重播，或在 Chrome / Edge 開啟此 HTML 檔案進行錄影下載。';
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: true
+        });
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+        };
+
+        mediaRecorder.onstop = () => {
+          stream.getTracks().forEach((t) => t.stop());
+          btnScreenRec.textContent = '🎬 錄影下載';
+          btnScreenRec.classList.remove('ring-2', 'ring-rose-500');
+          if (recordedChunks.length > 0) {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `keyboard_typing_${new Date().toISOString().slice(0, 10)}.webm`;
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+            liveStatusMsg.textContent = '影片錄製完成並已開始下載 (.webm)！';
+          }
+        };
+
+        mediaRecorder.start();
+        btnScreenRec.textContent = '⏹ 停止並下載影片';
+        btnScreenRec.classList.add('ring-2', 'ring-rose-500');
+        liveStatusMsg.textContent = '🎬 正在錄影畫面與聲音... 完成後請再點一次「⏹ 停止並下載影片」。';
+      } catch (err) {
+        liveStatusMsg.textContent = '無法啟動螢幕錄影（可能受限於沙盒預覽權限或已取消），您仍可使用左側「⏺ 錄製過程」完整記錄並重播！';
+      }
+    });
+
+    // --- Physical Keyboard Handling (Select Mode & Live Mode) ---
+    window.addEventListener('keydown', (e) => {
+      if (e.repeat) return;
+
+      if (appMode === 'live') {
+        if (ALL_KEYS_MAP.has(e.code)) {
+          const btn = keyboardView.querySelector(`[data-key-id="${e.code}"]`);
+          if (btn) btn.classList.add('is-pressing', 'is-live-glow');
+          const k = ALL_KEYS_MAP.get(e.code);
+          if (k) liveKeyBadge.textContent = getChipLabel(k);
+          recordEvent({ type: 'keydown', code: e.code });
+          if (e.isComposing && CODE_TO_ZHUYIN[e.code]) {
+            liveImeBuffer.push(CODE_TO_ZHUYIN[e.code]);
+            renderZhuyinSteps('', liveImeBuffer, liveImeBuffer.length - 1);
+          }
+          playClickSound(true);
+        }
+        return;
+      }
+
+      if (isZoomed && e.code === 'Escape') {
+        e.preventDefault();
+        exitZoomMode();
+        return;
+      }
+      if (!physicalSync || isZoomed) return;
+      if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+
+      if (ALL_KEYS_MAP.has(e.code)) {
+        if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.code)) {
+          e.preventDefault();
+        }
+        const btn = keyboardView.querySelector(`[data-key-id="${e.code}"]`);
+        if (btn) btn.classList.add('is-pressing');
+        playClickSound(true);
+        toggleKeySelection(e.code);
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      const btn = keyboardView.querySelector(`[data-key-id="${e.code}"]`);
+      if (btn) btn.classList.remove('is-pressing', 'is-live-glow');
+      if (appMode === 'live' && ALL_KEYS_MAP.has(e.code)) {
+        recordEvent({ type: 'keyup', code: e.code });
+      }
+    });
+
+    // Init
+    renderKeyboard();
+    updateSelectionUI();
+  </script>
+</body>
+</html>
